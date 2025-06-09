@@ -78,10 +78,9 @@ router.post('/', async function (peticion, respuesta) {
     // Consultar el listado de doctores.
     // aca me retorna un array 
     await conexionesDb.query(consulta, [datos.nombre, especialidadId])
-    
-    // Aca retorno el array de doctores en formato JSON.
+
     respuesta.json({
-      //Si se creo bien pongo
+      //Si se creo voy a mostrar
       mensaje: 'Doctor creado exitosamente.'
     });
   } catch (error) {
