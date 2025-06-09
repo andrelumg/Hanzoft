@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <title>Hanzoft - Cliente</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1><u> Mostrando un cliente</u></h1>
+        <table>
+            <thead>
+               <tr>
+                   <td><b>Campo</b></td>
+                    <td><b>Valor</b></td>
+               </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td id="id"></td>
+                </tr>
+                <tr>
+                    <td>Nombre</td>
+                    <td id="nombre"></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td id="email"></td>
+                </tr>
+                <tr>
+                    <td>Telefono</td>
+                    <td id="telefono"></td>
+                </tr>
+                <tr>
+                    <td>Cedula</td>
+                    <td id="cedula"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 style="display: none;">El Id es requerido</h2>
+        <script>
+            const parametrosGet = new URLSearchParams(window.location.search);
+            const id = parametrosGet.get('id');
+
+            if (id === null) {
+                const error = document.querySelector('h2');
+                error.style.removeProperty('display');
+            } else {
+                const rutaBase = 'http://localhost:3000/api';
+                const ruta = `${rutaBase}/clientes/${id}`;
+
+                axios.get(ruta)
+                    .then(function (response) {
+                        const tabla = document.querySelector('table tbody');
+                        const cliente = response.data;
+
+                        const id = tabla.querySelector('#id')
+                        const nombre = tabla.querySelector('#nombre')
+                        const email = tabla.querySelector('#email')
+                        const telefono = tabla.querySelector('#telefono')
+                        const cedula = tabla.querySelector('#cedula')
+
+                        id.textContent = cliente.id;
+                        nombre.textContent = cliente.nombre;
+                        email.textContent = cliente.email;
+                        telefono.textContent = cliente.telefono;
+                        cedula.textContent = cliente.cedula;
+                    });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Hanzoft - Mascotas</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Listado de doctores</h1>
+        <table>
+            <thead>
+               <tr>
+                    <td>ID</td>
+                    <td>Nombre</td>
+                    <td>Especialidad</td>
+                    <td>Acciones</td>
+               </tr> 
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <script>
+            const rutaBase = 'http://localhost:3000/api';
+            const ruta = `${rutaBase}/doctores`;
+
+            axios.get(ruta)
+                .then(function (response) {
+                    const doctores = response.data;
+
+                    const tabla = document.querySelector('table tbody');
+                    let cuerpoHtml = '';
+
+                    for (const doctor of doctores) {
+                        let filaHtml = '';
+                        filaHtml = '<tr>'
+                        filaHtml += '<td>' + doctor.id + '</td>'
+                        filaHtml += '<td>' + doctor.doctor  + '</td>'
+                        filaHtml += '<td>' + doctor.especialidad + '</td>'
+                        filaHtml += '<td><button>Editar</button></td>'
+                        filaHtml += '</tr>'
+                        cuerpoHtml += filaHtml;
+                    }
+
+                    tabla.innerHTML = cuerpoHtml
+
+                    console.log('doctores', doctores)
+                });
+        </script>
+    </body>
+</html>

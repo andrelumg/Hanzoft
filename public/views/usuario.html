@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>Hanzoft - Usuario</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Listado de Usuarios</h1>
+        <table>
+            <thead>
+               <tr>
+                    <td>Campo</td>
+                    <td>Valor</td>
+               </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Nombre</td>
+                    <td class="nombre"></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td class="email"></td>
+                </tr>
+                <tr>
+                    <td>Rol</td>
+                    <td class="rol"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 style="display: none;">El Id es requerido</h2>
+        <script>
+            const parametrosGet = new URLSearchParams(window.location.search);
+            const id = parametrosGet.get('id');
+
+            if (id === null) {
+                const error = document.querySelector('h2');
+                error.style.removeProperty('display');
+            } else {
+                const rutaBase = 'http://localhost:3000/api';
+                const ruta = `${rutaBase}/usuarios/${id}`;
+
+                axios.get(ruta)
+                    .then(function (response) {
+                        const tabla = document.querySelector('table tbody');
+                        const usuario = response.data;
+
+                        const nombre = tabla.querySelector('.nombre')
+                        const email = tabla.querySelector('.email')
+                        const rol = tabla.querySelector('.rol')
+
+                        nombre.textContent = usuario.nombre;
+                        email.textContent = usuario.email;
+                        rol.textContent = usuario.rol;
+                    });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Hanzoft - Usuarios</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Listado de Usuarios</h1>
+        <table>
+            <thead>
+               <tr>
+                    <td>ID</td>
+                    <td>Nombres</td>
+                    <td>Email</td>
+                    <td>Rol</td>
+                    <td>Acciones</td>
+               </tr> 
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <script>
+            const rutaBase = 'http://localhost:3000/api';
+            const ruta = `${rutaBase}/usuarios`;
+
+            axios.get(ruta)
+                .then(function (response) {
+                    const usuarios = response.data;
+
+                    const tabla = document.querySelector('table tbody');
+                    let cuerpoHtml = '';
+
+                    for (const usuario of usuarios) {
+                        let filaHtml = '';
+                        filaHtmlL = '<tr>'
+                        filaHtml += '<td>' + usuario.id + '</td>'
+                        filaHtml += '<td>' + usuario.nombre + '</td>'
+                        filaHtml += '<td>' + usuario.email + '</td>'
+                        filaHtml += '<td>' + usuario.rol + '</td>'
+                        filaHtml += '<td><button>Editar</button></td>'
+                        filaHtml += '</tr>'
+                        cuerpoHtml += filaHtml;
+                    }
+
+                    tabla.innerHTML = cuerpoHtml
+
+                    console.log('usuarios', usuarios)
+                });
+        </script>
+    </body>
+</html>

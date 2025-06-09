@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Hanzoft - Mascotas</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Listado de Mascotas</h1>
+        <table>
+            <thead>
+               <tr>
+                    <td>ID</td>
+                    <td>Nombre</td>
+                    <td>Especie</td>
+                    <td>Fecha de nacimiento</td>
+                    <td>Cliente</td>
+                    <td>Acciones</td>
+               </tr> 
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <script>
+            const rutaBase = 'http://localhost:3000/api';
+            const ruta = `${rutaBase}/mascotas`;
+
+            axios.get(ruta)
+                .then(function (response) {
+                    const mascotas = response.data;
+
+                    const tabla = document.querySelector('table tbody');
+                    let cuerpoHtml = '';
+
+                    for (const mascota of mascotas) {
+                        let filaHtml = '';
+                        filaHtmlL = '<tr>'
+                        filaHtml += '<td>' + mascota.id + '</td>'
+                        filaHtml += '<td>' + mascota.nombre + '</td>'
+                        filaHtml += '<td>' + mascota.especie + '</td>'
+                        filaHtml += '<td>' + mascota.fecha_nacimiento + '</td>'
+                        filaHtml += '<td>' + mascota.cliente + '</td>'
+                        filaHtml += '<td><button>Editar</button></td>'
+                        filaHtml += '</tr>'
+                        cuerpoHtml += filaHtml;
+                    }
+
+                    tabla.innerHTML = cuerpoHtml
+
+                    console.log('mascotas', mascotas)
+                });
+        </script>
+    </body>
+</html>

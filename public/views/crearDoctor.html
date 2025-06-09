@@ -1,0 +1,87 @@
+<html>
+<head>
+    <!--Este es el nombre que va a tener mi cabecera-->
+    <title>Hanzoft - Doctor</title>
+    
+    <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
+    <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Crear Doctor</h1>
+
+    <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
+    <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
+    <form id="formulario-doctor">
+
+        <!-- Campo para escribir el nombre del doctor -->
+        <label>
+            <p><strong>Nombre</strong></p>
+            <input type="text" id="nombre" maxlength="30" name="nombre">
+            <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
+        </label>
+
+        <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
+        <label>
+            <p><strong>Especialidad</strong></p>
+            <select id="especialidad" name="especialidad" required>
+                <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+                <option value="1">Medicina Interna</option>
+                <option value="2">Cardiología</option>
+                <option value="3">Oftalmología</option>
+                <option value="4">Cirugía</option>
+                <option value="5">Radiología</option>
+            </select>
+        </label>
+
+        <!-- Botón que envía el formulario -->
+        <div>
+            <br>
+            <input type="submit" value="Crear">
+        </div>
+    </form>
+
+    <!-- Aquí empieza el código JavaScript -->
+    <script>
+        // Definimos la URL donde vamos a enviar los datos usando el método POST
+        const ruta = 'http://localhost:3000/api/doctores';
+
+        // Seleccionamos el formulario usando su ID (formulario-doctor)
+        const formulario = document.querySelector('#formulario-doctor');
+
+        // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
+        formulario.addEventListener('submit', function (event) {
+            // Esto evita que el formulario recargue la página al enviarse
+            event.preventDefault();
+
+            // Obtenemos el valor que escribió el usuario en el campo de nombre
+            const nombre = document.getElementById('nombre').value;
+
+            // Obtenemos la especialidad seleccionada en el menú desplegable
+            const especialidad = document.getElementById('especialidad').value;
+
+            // Enviamos una solicitud POST a la API, con los datos del formulario
+            axios
+                .post(ruta, {
+                    // nombre del doctor
+                    nombre: nombre,             
+                    // id de la especialidad seleccionada
+                    especialidad: especialidad  
+                })
+                // Si el doctor se creó correctamente, mostramos un mensaje
+                .then(function (respuesta) {
+                    alert('Doctor creado exitosamente');
+                    // También lo mostramos en consola
+                    console.log(respuesta.data);  
+                    
+                })
+                // Si hubo un error en la petición, mostramos un mensaje de error
+                .catch(function (error) {
+                    alert('Ocurrió un error');
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+</html>
