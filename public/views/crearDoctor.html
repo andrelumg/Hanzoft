@@ -71,14 +71,14 @@
                 })
                 // Si el doctor se creó correctamente, mostramos un mensaje
                 .then(function (respuesta) {
-                    alert('Doctor creado exitosamente');
+                    alert(respuesta.data.mensaje);
                     // También lo mostramos en consola
-                    console.log(respuesta.data);  
+                    console.log(respuesta.data.mensaje);  
                     
                 })
                 // Si hubo un error en la petición, mostramos un mensaje de error
                 .catch(function (error) {
-                    alert('Ocurrió un error');
+                    alert(error.response.data.error);
                     console.error(error);
                 });
         });
