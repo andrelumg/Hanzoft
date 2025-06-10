@@ -11,7 +11,8 @@
                     <td>ID</td>
                     <td>Nombre</td>
                     <td>Especialidad</td>
-                    <td>Acciones</td>
+                    <td></td>
+                    <td></td>
                </tr> 
             </thead>
             <tbody>
@@ -20,7 +21,9 @@
         </table>
         <script>
             const rutaBase = 'http://localhost:3000/api';
+            const rutaFront = 'http:/localhost:3000/app';
             const ruta = `${rutaBase}/doctores`;
+            const rutaModificar = `${rutaFront}/doctores.html`;
 
             axios.get(ruta)
                 .then(function (response) {
@@ -35,14 +38,29 @@
                         filaHtml += '<td>' + doctor.id + '</td>'
                         filaHtml += '<td>' + doctor.doctor  + '</td>'
                         filaHtml += '<td>' + doctor.especialidad + '</td>'
-                        filaHtml += '<td><button>Editar</button></td>'
+                        filaHtml += `<td><a href="${rutaModificar}?id=${doctor.id}">Modificar</a></td>`
+                        filaHtml += `<td><button class="eliminar-doctor" data-id="${doctor.id}">Eliminar</button></td>`
                         filaHtml += '</tr>'
                         cuerpoHtml += filaHtml;
                     }
 
                     tabla.innerHTML = cuerpoHtml
 
-                    console.log('doctores', doctores)
+                    const botonesEliminar = tabla.querySelectorAll('.eliminar-doctor');
+                    
+                    botonesEliminar.forEach(function (botonEliminar){
+                        botonEliminar.addEventListener('click', function () {
+                            const doctorId = botonEliminar.getAttribute('data-id')
+                            const rutaEliminar = ruta + '/' + doctorId;
+
+                            if (confirm('Esta seguro que desea eliminar el doctor?')) {
+                                axios.delete(rutaEliminar).then(function(respuesta) {
+                                    alert(respuesta.data.mensaje);
+                                    window.location.reload();
+                                });
+                            }
+                        });
+                    });
                 });
         </script>
     </body>

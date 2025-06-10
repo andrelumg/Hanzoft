@@ -36,7 +36,7 @@ router.get('/', async function (peticion, respuesta) {
 
 // Ruta GET para obtener los datos de un doctor por su ID
 router.get('/:doctorId', async function (peticion, respuesta) {
-  // Obtener el ID de la mascota desde los parámetros de la URL
+  // Obtener el ID del doctor desde los parámetros de la URL
   const doctorId = peticion.params.doctorId;
 
   // Manejo de errores con try...catch
@@ -65,10 +65,12 @@ router.get('/:doctorId', async function (peticion, respuesta) {
   }
 });
 
+//Metodo para agregar un doctor
 router.post('/', async function (peticion, respuesta) {
   //try catch para controlar si llega a haber un error.
 
   try {
+    //aquí se guardan los datos que el usuario envió desde el formulario o cliente frontend
     const datos = peticion.body;
     const especialidadId = Number(datos.especialidad)
 
@@ -86,7 +88,7 @@ router.post('/', async function (peticion, respuesta) {
       //Si se creo voy a mostrar
       mensaje: 'Doctor creado exitosamentes.'
     });
-  
+
   } catch (error) {
     //este es el mensaje que va a mostrar si falla
     console.error('Error al consultar las doctores', error)
@@ -108,41 +110,68 @@ router.post('/', async function (peticion, respuesta) {
 })
 
 // Ruta POST para eliminar los datos de un doctor por su ID
-router.post('/eliminar/:doctorId', async function (peticion, respuesta) {
+router.delete('/:doctorId', async function (peticion, respuesta) {
   // Obtener el ID del doctor  desde los parámetros de la URL
   const doctorId = peticion.params.doctorId;
 
   // Manejo de errores con try...catch
   try {
-    // Consulta SQL para traer los datos de la mascota con ese ID
-    const consulta = `DELETE id FROM doctores WHERE doctores.id = ?`; 
-    // Ejecutar la consulta
-    const resultado = await conexionesDb.query(consulta, [doctorId]);
-    // Asigno las filas que vienen en el resultado de la consulta a una nueva variable.
-    const filas = resultado[0];
-    // Como las filas retornadas siempre es un array, el objeto que representa el doctor viene en la primera
-    // posicion del array, asi que eso es lo que devuelvo en la respuesta.
-    // mi condicion deberia arrojar error cuando el DoctorId no existe
-    if (doctorId.trim==""){
-      throw new Error('No existe un doctor para eliminar.');
-
+    if (doctorId.trim() == "") {
+      throw new Error('El id del doctor es requerido.');
     }
 
+    // Consulta SQL para traer los datos de la mascota con ese ID
+    const consulta = `DELETE FROM doctores WHERE doctores.id = ?`;
+    // Ejecutar la consulta
+
+    await conexionesDb.query(consulta, [doctorId]);
+
+    // Como las filas retornadas siempre es un array, el objeto que representa el doctor viene en la primera
+    // posicion del array, asi que eso es lo que devuelvo en la respuesta.
+    // mi condicion deberia arrojar error cuando el DoctorId no existe.
     respuesta.json({
       //Si logro eliminar pongo este mensaje 
       mensaje: 'Doctor eliminado exitosamente.'
     });
-    const doctor = filas[0];
-    respuesta.json(doctor);
+
   } catch (error) {
     console.error('Error al eliminar el doctor', error);
-    console.error(error);
+
     respuesta.status(500).json({
       error: 'Error en el servidor',
     });
   }
 });
 
-
-
+// Ruta PUT para obtener los datos de un doctor por su ID y modificarlos
+router.put('/:doctorId', async function (peticion, respuesta) {
+  // Obtener el ID del doctor desde los parámetros de la URL
+  const doctorId = peticion.params.doctorId;
+   // Manejo de errores con try...catch
+  try {
+    // Consulta SQL para traer los datos del doctor con ese ID
+    const consulta = `SELECT doctores.id , doctores.nombre , especialidades.nombre AS 'especialidad'
+    FROM especialidades
+    INNER JOIN doctores ON doctores.especialidades_id = especialidades.id
+    WHERE doctores.id = ?`; 
+    // Ejecutar la consulta
+    const resultado = await conexionesDb.query(consulta, [doctorId]);
+    // Asigno las filas que vienen en el resultado de la consulta a una nueva variable.
+    const filas = resultado[0];
+    //una vez se asigne el resultado de la consulta, procedo a ejecutar la modificacion
+    // Consulta SQL para modificar los datos del doctor desde su ID
+    const consultaModificacion = `UPDATE doctores SET doctores.nombre= ? ,doctores.especialidades_id = ?
+    WHERE doctores.id = ? `
+    // Aca le paso los tres parametros aunque solament se realicen dos,porque necesito el ID
+    await conexionesDb.query(consultaModificacion, [nombre, especialidades_id, doctorId]);
+    // Se responde con un mensaje de confirmación cuando se
+    // realice el cambio porque los datos actualizados se verán al recargar desde el HTML.
+    respuesta.json({mensaje: 'El doctor se actualizo correctamente'});
+  } catch (error) {
+    console.error('Error al modificar al doctor', error);
+    respuesta.status(500).json({
+      error: 'Error en el servidor',
+    });
+  }
+});
 module.exports = router;
