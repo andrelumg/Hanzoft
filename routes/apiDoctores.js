@@ -42,7 +42,7 @@ router.get('/:doctorId', async function (peticion, respuesta) {
   // Manejo de errores con try...catch
   try {
     // Consulta SQL para traer los datos de la mascota con ese ID
-    const consulta = `SELECT doctores.id , doctores.nombre , especialidades.nombre AS 'especialidad'
+    const consulta = `SELECT doctores.id , doctores.nombre , doctores.especialidades_id, especialidades.nombre AS 'especialidad'
     FROM especialidades
     INNER JOIN doctores ON doctores.especialidades_id = especialidades.id
     WHERE doctores.id = ?`;
@@ -147,26 +147,28 @@ router.delete('/:doctorId', async function (peticion, respuesta) {
 router.put('/:doctorId', async function (peticion, respuesta) {
   // Obtener el ID del doctor desde los parámetros de la URL
   const doctorId = peticion.params.doctorId;
-   // Manejo de errores con try...catch
+  // Manejo de errores con try...catch
   try {
-    // Consulta SQL para traer los datos del doctor con ese ID
-    const consulta = `SELECT doctores.id , doctores.nombre , especialidades.nombre AS 'especialidad'
-    FROM especialidades
-    INNER JOIN doctores ON doctores.especialidades_id = especialidades.id
-    WHERE doctores.id = ?`; 
-    // Ejecutar la consulta
-    const resultado = await conexionesDb.query(consulta, [doctorId]);
-    // Asigno las filas que vienen en el resultado de la consulta a una nueva variable.
-    const filas = resultado[0];
-    //una vez se asigne el resultado de la consulta, procedo a ejecutar la modificacion
+    //aquí se guardan los datos que el usuario envió desde el formulario o cliente frontend
+    const datos = peticion.body;
+    const nombre = datos.nombre;
+    const especialidades_id = Number(datos.especialidad);
     // Consulta SQL para modificar los datos del doctor desde su ID
-    const consultaModificacion = `UPDATE doctores SET doctores.nombre= ? ,doctores.especialidades_id = ?
-    WHERE doctores.id = ? `
+    //una vez se asigne el resultado de la consulta, procedo a ejecutar la modificacion
+
+    const consultaModificacion = `
+      UPDATE doctores
+      SET doctores.nombre = ?, doctores.especialidades_id = ?
+      WHERE doctores.id = ?
+    `
+
     // Aca le paso los tres parametros aunque solament se realicen dos,porque necesito el ID
     await conexionesDb.query(consultaModificacion, [nombre, especialidades_id, doctorId]);
     // Se responde con un mensaje de confirmación cuando se
     // realice el cambio porque los datos actualizados se verán al recargar desde el HTML.
-    respuesta.json({mensaje: 'El doctor se actualizo correctamente'});
+    respuesta.json({
+      mensaje: 'El doctor se actualizo correctamente'
+    });
   } catch (error) {
     console.error('Error al modificar al doctor', error);
     respuesta.status(500).json({
@@ -174,4 +176,5 @@ router.put('/:doctorId', async function (peticion, respuesta) {
     });
   }
 });
+
 module.exports = router;

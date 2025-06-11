@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>Hanzoft - Modificar Doctor</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Modificar Doctor</h1>
+
+    <form id="ModificarDoctor">
+        <label for="nombre"> nombre del Doctor:</label>
+        <input type="text" id="nombre" name="nombre" maxlength="30">
+        <br>
+        <br>
+        <label><strong>Especialidad</strong></label>
+        <select id="especialidad" name="especialidad" required>
+            <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+            <option value="1">Medicina Interna</option>
+            <option value="2">Cardiología</option>
+            <option value="3">Oftalmología</option>
+            <option value="4">Cirugía</option>
+            <option value="5">Radiología</option>
+        </select>
+        <br>
+        <!-- Botón que envía el formulario -->
+        <!-- El div es como el contenedor -->
+        <div>
+            <br>
+            <button type="submit"> 💾 Guardar Cambios </button>
+        </div>
+    </form>
+
+    <!-- Aquí empieza el código JavaScript -->
+    <script>
+        //Aca estoy creando con el nombre parametros Get un objeto URLSearchParams para leer los parámetros que vienen en la URL,
+        // o sea en este caso mi ID
+        const parametrosGet = new URLSearchParams(window.location.search);
+
+        // Aca obtenemos el ID, para poder pasarlo 
+        const id = parametrosGet.get('id');
+
+        // Definimos la URL donde vamos a enviar los datos usando el método PUT
+        const ruta = `http://localhost:3000/api/doctores/${id}`;
+
+        // Seleccionamos el formulario usando su ID (formulario-doctor)
+        const formulario = document.querySelector('#ModificarDoctor');
+        const nombreInput = formulario.querySelector('#nombre')
+        const especialidadSelector = formulario.querySelector('#especialidad')
+        
+        axios.get(ruta)
+            .then(function (respuesta) {
+                const doctor = respuesta.data;            
+                nombreInput.value = doctor.nombre;
+                especialidadSelector.value = doctor.especialidades_id
+            });
+    
+        // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
+        formulario.addEventListener('submit', function (event) {
+            console.log(event)
+            // Esto evita que el formulario recargue la página al enviarse
+            event.preventDefault();
+            
+            // Enviamos una solicitud PUT a la API, con los datos del formulario
+            axios.put(ruta, {
+                // nombre del doctor
+                nombre: nombreInput.value,
+                // id de la especialidad seleccionada
+                especialidad: especialidadSelector.value
+            })
+            // Si el doctor se actualizo correctamente, mostramos un mensaje
+            .then(function (respuesta) {
+                alert(respuesta.data.mensaje);
+                // También lo mostramos en consola
+                console.log(respuesta.data.mensaje);
+                window.location.href = 'http://localhost:3000/app/doctores.html'
+
+            })
+            // Si hubo un error en la petición, mostramos un mensaje de error
+            .catch(function (error) {
+                alert(error.response.data.error);
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
