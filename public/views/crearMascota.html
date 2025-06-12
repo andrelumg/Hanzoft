@@ -1,0 +1,135 @@
+<html>
+
+<head>
+    <!--Este es el nombre que va a tener mi cabecera-->
+    <title>Hanzoft - Crear mascota</title>
+
+    <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
+    <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>🐱 Crear Mascota 🐺</h1>
+
+    <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
+    <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
+    <form id="formulario-mascota">
+
+        <!-- Campo para escribir el nombre del doctor -->
+        <label>
+            <p><strong>Nombre de mascota: </strong></p>
+            <input type="text" id="nombre" maxlength="30" name="nombre" required>
+            <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
+        </label>
+        <label>
+            <p><strong>Especie Mascota: </strong></p>
+        </label>
+        <select id="especie" name="especie" required>
+            <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+            <option value="gato">Gato</option>
+            <option value="perro">Perro</option>
+            <option value="conejo">Conejo</option>
+            <option value="ave">Ave</option>
+            <option value="raton">Raton</option>
+            <option value="otro">Otro</option>
+        </select>
+        <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
+        <label>
+            <p><strong>Fecha de Nacimiento Mascota: </strong></p>
+
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" min="1999-01-01" max="2025-12-31" required>
+        </label>
+        <label>
+            <p></p><strong>Responsable de la mascota: </strong></p>
+        </label>
+        <select id="nombre_tutor" name="nombre_tutor" required>
+            <!-- Cada opción tiene un número como "value" que representa el ID del cliente en la base de datos -->
+        </select>
+        <!-- Botón que envía el formulario -->
+        <div>
+            <br>
+            <input type="submit" value="Crear ✅">
+        </div>
+    </form>
+
+    <!-- Aquí empieza el código JavaScript -->
+    <script>
+        // Definimos la URL donde vamos a enviar los datos usando el método POST
+        const ruta = 'http://localhost:3000/api/mascotas';
+        const rutaclientes = 'http://localhost:3000/api/clientes'
+
+        // Seleccionamos el formulario usando su ID (formulario-clientes)
+        const formulario = document.querySelector('#formulario-mascota');
+
+        // Enviamos una solicitud POST a la API, con los datos del formulario
+        const tutorSelector = formulario.querySelector('#nombre_tutor');
+
+        //Tengo que traer la lista de tutores para poder asociarlo a la mascota
+        axios.get(rutaclientes)
+            .then(function (respuestaCliente) {
+                //traigo los datos de mi cliente para poder organizarlos
+                const clientes = respuestaCliente.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre del cliente
+                //para que tengan relacion con la mascota
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml = '';
+                console.log(clientes)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
+
+                for (let i = 0; i < clientes.length; i++) {
+                    const cliente = clientes[i];
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';
+                }
+
+                tutorSelector.innerHTML = miHtml;
+
+            });
+
+
+        // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
+        formulario.addEventListener('submit', function (event) {
+            // Esto evita que el formulario recargue la página al enviarse
+            event.preventDefault();
+
+            // Obtenemos el valor que escribió el usuario en el campo de nombre
+            const nombre = document.getElementById('nombre').value;
+            //Obtenemos el valor que indico el usuario en el campo email
+            const especie = document.getElementById('especie').value;
+            // Obtenemos el calor que indico el usuario en telefono
+            const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
+
+
+            axios.post(ruta, {
+                // nombre del cliente
+                nombre: nombre,
+                // correo del cliente
+                especie: especie,
+                // telefono del cliente
+                fecha_nacimiento: fecha_nacimiento,
+                // Responsable asignado
+                clientes_id: Number(tutorSelector.value)
+
+            })
+
+                // Si el cliente se creó correctamente, mostramos un mensaje
+                .then(function (respuesta) {
+                    alert(respuesta.data.mensaje);
+                    // También lo mostramos en consola
+                    console.log(respuesta.data.mensaje);
+
+                })
+                // Si hubo un error en la petición, mostramos un mensaje de error
+                .catch(function (error) {
+                    alert(error.response.data.error);
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+
+</html>

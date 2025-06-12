@@ -63,7 +63,7 @@ router.post('/', async function (peticion, respuesta) {
     //Yo deberia traer el dato del nombre del cliente por lo que lo creo aca
     // y lo casteo como numero para poderlo asociar, en el html creare
     //una lista en donde mostrare los datos completos
-    const clientesId = Number(datos.nombre)
+    const clientesId = Number(datos.clientes_id);
 
     //aca estoy declarando la consulta que me ayuda a validar que datos
     //debo ingresar en mi nueva mascota

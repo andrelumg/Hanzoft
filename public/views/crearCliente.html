@@ -1,7 +1,7 @@
 <html>
 <head>
     <!--Este es el nombre que va a tener mi cabecera-->
-    <title>Hanzoft - Doctor</title>
+    <title>Hanzoft - Crear cliente</title>
     
     <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
     <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
@@ -9,30 +9,29 @@
 </head>
 
 <body>
-    <h1>Crear Doctor</h1>
+    <h1>🙋🏼‍♀️ Crear cliente 🙋🏼‍♂️</h1>
 
     <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
     <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
-    <form id="formulario-doctor">
+    <form id="formulario-cliente">
 
         <!-- Campo para escribir el nombre del doctor -->
         <label>
-            <p><strong>Nombre</strong></p>
-            <input type="text" id="nombre" maxlength="30" name="nombre">
+            <p><strong>Nombre: </strong></p>
+            <input type="text" id="nombre" maxlength="30" name="nombre" required>
             <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
         </label>
-
+        <label>
+            <p><strong>Correo electronico: </strong></p>
+            <input type="text" id="email" maxlength="40" name="email" required>
+        </label>
         <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
         <label>
-            <p><strong>Especialidad</strong></p>
-            <select id="especialidad" name="especialidad" required>
-                <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
-                <option value="1">Medicina Interna</option>
-                <option value="2">Cardiología</option>
-                <option value="3">Oftalmología</option>
-                <option value="4">Cirugía</option>
-                <option value="5">Radiología</option>
-            </select>
+            <p><strong>Telefono: </strong></p>
+            <input type="text" id="telefono" maxlength="13" minlength="10" name="telefono" required>
+        </label>
+        <label><p><strong>Documento de identificacion</strong></p>
+        <input type="text" id="cedula" name="cedula" required>
         </label>
 
         <!-- Botón que envía el formulario -->
@@ -45,10 +44,10 @@
     <!-- Aquí empieza el código JavaScript -->
     <script>
         // Definimos la URL donde vamos a enviar los datos usando el método POST
-        const ruta = 'http://localhost:3000/api/doctores';
+        const ruta = 'http://localhost:3000/api/clientes';
 
-        // Seleccionamos el formulario usando su ID (formulario-doctor)
-        const formulario = document.querySelector('#formulario-doctor');
+        // Seleccionamos el formulario usando su ID (formulario-clientes)
+        const formulario = document.querySelector('#formulario-cliente');
 
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
         formulario.addEventListener('submit', function (event) {
@@ -57,28 +56,34 @@
 
             // Obtenemos el valor que escribió el usuario en el campo de nombre
             const nombre = document.getElementById('nombre').value;
-
-            // Obtenemos la especialidad seleccionada en el menú desplegable
-            const especialidad = document.getElementById('especialidad').value;
-
+            //Obtenemos el valor que indico el usuario en el campo email
+            const email = document.getElementById('email').value;
+            // Obtenemos el calor que indico el usuario en telefono
+            const telefono = document.getElementById('telefono').value;
+            // Obtenemos el valor que indico el usuario en cedula
+            const cedula = document.getElementById('cedula').value;
             // Enviamos una solicitud POST a la API, con los datos del formulario
             axios
                 .post(ruta, {
-                    // nombre del doctor
+                    // nombre del cliente
                     nombre: nombre,             
-                    // id de la especialidad seleccionada
-                    especialidad: especialidad  
+                    // correo del cliente
+                    email: email,  
+                    // telefono del cliente
+                    telefono : telefono,
+                    // cedula del cliente
+                    cedula : cedula
                 })
-                // Si el doctor se creó correctamente, mostramos un mensaje
+                // Si el cliente se creó correctamente, mostramos un mensaje
                 .then(function (respuesta) {
-                    alert('Doctor creado exitosamente');
+                    alert(respuesta.data.mensaje);
                     // También lo mostramos en consola
-                    console.log(respuesta.data);  
+                    console.log(respuesta.data.mensaje);  
                     
                 })
                 // Si hubo un error en la petición, mostramos un mensaje de error
                 .catch(function (error) {
-                    alert('Ocurrió un error');
+                    alert(error.response.data.error );
                     console.error(error);
                 });
         });

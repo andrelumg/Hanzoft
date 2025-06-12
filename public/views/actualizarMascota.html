@@ -56,16 +56,19 @@
         const formulario = document.querySelector('#ModificarMascota');
         //ref linea12
         const nombreInput = formulario.querySelector('#nombre');
+        //ref linea 16
         const especieSelector = formulario.querySelector('#especie');
-        const especieInicial = formulario.querySelector('#especie');
-        //
+        //ref linea 28
         const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
-        // CANSONAAAAAA
+        //ref linea 32
         const tutorSelector = formulario.querySelector('#nombre_tutor');
+        console.log(mascota);
 
+        //mi axios para poder traer los datos de mi cliente, ya que quiero mostrar el nombre
+        //del tutor de mi mascota.
         axios.get(rutaClientes)
             .then(function (respuestaCliente) {
-                //traigo los datos de mi cliente para poder
+                //traigo los datos de mi cliente para poder organizarlos
                 const clientes = respuestaCliente.data;
                 //aca creo una variable en la que pasare los datos que 
                 //necesito en mi html, en este caso el ID y el nombre del cliente
@@ -73,24 +76,28 @@
                 //lo inicializo vacio porque abajo en el for lo voy a llenar
                 let miHtml = '';
                 console.log(clientes)
-                //Este es el for en el cual voy a recorrer mi array de clientes
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
 
                 for (let i = 0; i < clientes.length; i++) {
                     const cliente = clientes[i];
-                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';      
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';
                 }
+
                 tutorSelector.innerHTML = miHtml;
-                
+
             });
 
-            axios.get(ruta)
+        axios.get(ruta)
             .then(function (respuesta) {
                 const mascota = respuesta.data;
                 //uso la nomenclatura para remplazar que propuse en mi base de datos  
-                console.log("las mascotas" +mascota)
+                console.log("las mascotas" + mascota)
                 //  
-                nombreInput.value = mascota.nombre;  
-                especieSelector.value = mascota.especie;             
+                nombreInput.value = mascota.nombre;
+                especieSelector.value = mascota.especie;
                 //el slice se usa para traer una parte de mi cadena serian ejemplo 
                 //12-23-2009 (10 caracteres de mi dato) 
                 fechaCalendario.value = mascota.fecha_nacimiento.slice(0, 10);
