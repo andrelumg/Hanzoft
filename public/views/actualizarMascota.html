@@ -15,12 +15,12 @@
         <label><strong>Especie: </strong></label>
         <select id="especie" name="especie" required>
             <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
-            <option value="1">Gato</option>
-            <option value="2">Perro</option>
-            <option value="3">Conejo</option>
-            <option value="4">Ave</option>
-            <option value="5">Raton</option>
-            <option value="6">Otro</option>
+            <option value="gato">Gato</option>
+            <option value="perro">Perro</option>
+            <option value="conejo">Conejo</option>
+            <option value="ave">Ave</option>
+            <option value="raton">Raton</option>
+            <option value="otro">Otro</option>
         </select>
         <br>
         <br>
@@ -42,13 +42,10 @@
 
     <!-- Aquí empieza el código JavaScript -->
     <script>
-        //Aca estoy creando con el nombre parametrosGet un objeto URLSearchParams para leer los parámetros que vienen en la URL,
-        // o sea en este caso mi ID
-        const parametrosGet = new URLSearchParams(window.location.search);
 
+        const parametrosGet = new URLSearchParams(window.location.search);
         // Aca obtenemos el ID, para poder pasarlo 
         const id = parametrosGet.get('id');
-
         // Definimos la URL donde vamos a enviar los datos usando el método PUT
         const ruta = `http://localhost:3000/api/mascotas/${id}`;
         const rutaClientes = `http://localhost:3000/api/clientes/`
@@ -59,8 +56,8 @@
         const formulario = document.querySelector('#ModificarMascota');
         //ref linea12
         const nombreInput = formulario.querySelector('#nombre');
-        //ref linea16
         const especieSelector = formulario.querySelector('#especie');
+        const especieInicial = formulario.querySelector('#especie');
         //
         const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
         // CANSONAAAAAA
@@ -68,38 +65,37 @@
 
         axios.get(rutaClientes)
             .then(function (respuestaCliente) {
-                //traigo los datos de mi cliente
+                //traigo los datos de mi cliente para poder
                 const clientes = respuestaCliente.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre del cliente
+                //para que tengan relacion con la mascota
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml = '';
                 console.log(clientes)
-                let miHtml ='';
+                //Este es el for en el cual voy a recorrer mi array de clientes
 
                 for (let i = 0; i < clientes.length; i++) {
                     const cliente = clientes[i];
-                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';
-                    tutorSelector.innerHTML = miHtml;
-
+                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';      
                 }
-
+                tutorSelector.innerHTML = miHtml;
+                
             });
 
-        //axios es una biblioteca, aca uso el metodo get porque necesito traer los valores
-        //de mi mascota, le paso la ruta en donde estan esos datos ref linea52
-
-        axios.get(ruta)
+            axios.get(ruta)
             .then(function (respuesta) {
                 const mascota = respuesta.data;
-                console.log(mascota)
-                //uso la nomenclatura para remplazar que propuse en mi base de datos    
-                nombreInput.value = mascota.nombre;
-                for (let i= 0; i< mascota.length; i++){
-                    const especies = especie[i];
-                    miHtml += '<option value="' + mascota.id + '">' + mascota.especie + '</option>';
-
-                     especieSelector.value = mascota.especie
-                }
-               
-                nacimientoSelector.value = mascota.fecha_nacimiento
-                tutorSelector.value = mascota.clientes_id
+                //uso la nomenclatura para remplazar que propuse en mi base de datos  
+                console.log("las mascotas" +mascota)
+                //  
+                nombreInput.value = mascota.nombre;  
+                especieSelector.value = mascota.especie;             
+                //el slice se usa para traer una parte de mi cadena serian ejemplo 
+                //12-23-2009 (10 caracteres de mi dato) 
+                fechaCalendario.value = mascota.fecha_nacimiento.slice(0, 10);
+                //aca debo relacionar el id de mi cliente (asi esta definido en mi BD)
+                tutorSelector.value = mascota.cliente.id
 
             });
 
