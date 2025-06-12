@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>Hanzoft - Modificar Mascota</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -62,40 +63,46 @@
         const especieSelector = formulario.querySelector('#especie');
         //
         const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
-        //
+        // CANSONAAAAAA
         const tutorSelector = formulario.querySelector('#nombre_tutor');
+
+        axios.get(rutaClientes)
+            .then(function (respuestaCliente) {
+                //traigo los datos de mi cliente
+                const clientes = respuestaCliente.data;
+                console.log(clientes)
+                let miHtml ='';
+
+                for (let i = 0; i < clientes.length; i++) {
+                    const cliente = clientes[i];
+                    miHtml += '<option value="' + cliente.id + '">' + cliente.nombre + '</option>';
+                    tutorSelector.innerHTML = miHtml;
+
+                }
+
+            });
+
         //axios es una biblioteca, aca uso el metodo get porque necesito traer los valores
         //de mi mascota, le paso la ruta en donde estan esos datos ref linea52
 
-        //tengo que hacer
-
-        axios.get(rutaClientes)
-        .then(function (respuestaCliente){
-            //traigo los datos de mi cliente
-            const clientes = respuestaCliente.data;
-            console.log (clientes)
-                        
-            for (let i=0 ; i < clientes.lenght ; i++){
-                const cliente = clientes[i];
-                
-
-            }
-
-            
-        });
-
-
         axios.get(ruta)
             .then(function (respuesta) {
-                const mascota = respuesta.data;  
+                const mascota = respuesta.data;
+                console.log(mascota)
                 //uso la nomenclatura para remplazar que propuse en mi base de datos    
                 nombreInput.value = mascota.nombre;
-                especieSelector.value = mascota.especie
+                for (let i= 0; i< mascota.length; i++){
+                    const especies = especie[i];
+                    miHtml += '<option value="' + mascota.id + '">' + mascota.especie + '</option>';
+
+                     especieSelector.value = mascota.especie
+                }
+               
                 nacimientoSelector.value = mascota.fecha_nacimiento
                 tutorSelector.value = mascota.clientes_id
- 
+
             });
-        
+
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
         //referencia linea 29
         formulario.addEventListener('submit', function (event) {
@@ -110,9 +117,9 @@
                 // id de la nueva especialidad seleccionada
                 especie: especieSelector.value,
                 //Nueva fecha de nacimiento seleccionada
-               fecha_nacimiento: nacimientoSelector.value,
-               //Nuevo tutor seleccionado
-               clientes_id: tutorSelector.value
+                fecha_nacimiento: fechaCalendario.value,
+                //Nuevo tutor seleccionado
+                clientes_id: tutorSelector.value
             })
                 // Si el doctor se actualizo correctamente, mostramos un mensaje, este mensaje
                 //es el que genere en mi API
@@ -123,7 +130,7 @@
                     //una vez el mensaje cargue la idea es que volvamos a la lista de doctores
                     //por lo que usamos una libreria que nos ayude con eso
                     //pasandole la url a la que vamos a volver
-                    window.location.href = 'http://localhost:3000/app/doctores.html'
+                    window.location.href = 'http://localhost:3000/app/mascotas.html'
 
                 })
                 // Si hubo un error en la petición, es decir no se hizo bien el proceso
