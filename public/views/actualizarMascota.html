@@ -62,7 +62,7 @@
         const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
         //ref linea 32
         const tutorSelector = formulario.querySelector('#nombre_tutor');
-        console.log(mascota);
+     
 
         //mi axios para poder traer los datos de mi cliente, ya que quiero mostrar el nombre
         //del tutor de mi mascota.
@@ -94,7 +94,7 @@
             .then(function (respuesta) {
                 const mascota = respuesta.data;
                 //uso la nomenclatura para remplazar que propuse en mi base de datos  
-                console.log("las mascotas" + mascota)
+                console.log("las mascotas", mascota)
                 //  
                 nombreInput.value = mascota.nombre;
                 especieSelector.value = mascota.especie;
@@ -102,7 +102,7 @@
                 //12-23-2009 (10 caracteres de mi dato) 
                 fechaCalendario.value = mascota.fecha_nacimiento.slice(0, 10);
                 //aca debo relacionar el id de mi cliente (asi esta definido en mi BD)
-                tutorSelector.value = mascota.cliente.id
+                tutorSelector.value = mascota.clientes_id;
 
             });
 

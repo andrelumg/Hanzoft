@@ -35,10 +35,13 @@ router.get('/:mascotaId', async function (peticion, respuesta) {
   // Manejo de errores con try...catch
   try {
     // Consulta SQL para traer los datos de la mascota con ese ID
-    const consulta = `SELECT mascotas.id, mascotas.nombre, mascotas.especie, mascotas.fecha_nacimiento, clientes.nombre AS 'tutor'
+    const consulta =`SELECT mascotas.id, mascotas.nombre, mascotas.especie, mascotas.fecha_nacimiento, 
+    clientes.id AS clientes_id, clientes.nombre AS tutor
     FROM mascotas 
     INNER JOIN clientes ON mascotas.clientes_id = clientes.id 
-    WHERE mascotas.id = ?`;
+    WHERE mascotas.id = ?`
+
+
 
     // Ejecutar la consulta
     const [rows] = await conexionesDb.query(consulta, [mascotaId]);
