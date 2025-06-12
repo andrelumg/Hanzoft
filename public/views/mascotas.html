@@ -8,12 +8,13 @@
         <table>
             <thead>
                <tr>
-                    <td>ID</td>
-                    <td>Nombre</td>
-                    <td>Especie</td>
-                    <td>Fecha de nacimiento</td>
-                    <td>Cliente</td>
-                    <td>Acciones</td>
+                    <td><strong>ID</strong></td>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>Especie</strong></td>
+                    <td><strong>Fecha de nacimiento</strong></td>
+                    <td><strong>Cliente</strong></td>
+                    <td></td>
+                    <td></td>
                </tr> 
             </thead>
             <tbody>
@@ -22,8 +23,10 @@
         </table>
         <script>
             const rutaBase = 'http://localhost:3000/api';
+            const rutaBaseFront = 'http://localhost:3000/app';
             const ruta = `${rutaBase}/mascotas`;
-
+            const rutaModificar =`${rutaBaseFront}/actualizarMascota.html`;
+                
             axios.get(ruta)
                 .then(function (response) {
                     const mascotas = response.data;
@@ -33,20 +36,50 @@
 
                     for (const mascota of mascotas) {
                         let filaHtml = '';
-                        filaHtmlL = '<tr>'
+                        filaHtml = '<tr>';
                         filaHtml += '<td>' + mascota.id + '</td>'
                         filaHtml += '<td>' + mascota.nombre + '</td>'
                         filaHtml += '<td>' + mascota.especie + '</td>'
                         filaHtml += '<td>' + mascota.fecha_nacimiento + '</td>'
                         filaHtml += '<td>' + mascota.cliente + '</td>'
-                        filaHtml += '<td><button>Editar</button></td>'
+                        filaHtml += `<td><a href="${rutaModificar}?id=${mascota.id}">Modificar</a></td>`
+                        filaHtml += `<td><button class="eliminar-mascota" data-id="${mascota.id}">Eliminar 🗑️</button></td>`
                         filaHtml += '</tr>'
                         cuerpoHtml += filaHtml;
                     }
 
                     tabla.innerHTML = cuerpoHtml
+                    // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
+                    //la accion que estoy haciendo
+                    const botonesEliminar = tabla.querySelectorAll('.eliminar-mascota');
+                    //realizo un for each para poder recorrer la tabla 
+                    botonesEliminar.forEach(function(botonEliminar){
+                    //añado un evento click para que se ejecute:    
+                        botonEliminar.addEventListener('click', function(){
+                            //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
+                            const mascotaId = botonEliminar.getAttribute('data-id')
+                            //Hago referencia a la ruta de la linea 26, en donde obtender el id
+                            //de la mascota a eliminar.
+                            const rutaEliminar = ruta + '/' + mascotaId;
 
-                    console.log('mascotas', mascotas)
+                            //Hare una pregunta de confirmacion en caso de que por error
+                            //se haya indicado que se queria eliminar a la mascota
+
+                            if(confirm('Esta seguro que desea eliminar esta mascota?')){
+                                //llamo otra vez un ajax (axios) par que me ayude a gestionar
+                                axios.delete(rutaEliminar).then(function(respuesta){
+                                    alert(respuesta.data.mensaje);
+                                    window.location.reload();
+                                })
+                            }
+
+                        });
+
+
+
+                    });
+
+                
                 });
         </script>
     </body>

@@ -1,27 +1,36 @@
 <html>
-
 <head>
-    <title>Hanzoft - Modificar Doctor</title>
+    <title>Hanzoft - Modificar Mascota</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <h1>Informacion del Doctor 🐾</h1>
-    <form id="ModificarDoctor">
-        <label for="nombre"><strong> Nombre del Doctor : </strong></label>
+    <h1>Informacion de la mascota 🐾</h1>
+    <form id="ModificarMascota">
+        <label for="nombre"><strong> Nombre de la mascota : </strong></label>
         <input type="text" id="nombre" name="nombre" maxlength="30">
         <br>
         <br>
-        <label><strong>Especialidad: </strong></label>
-        <select id="especialidad" name="especialidad" required>
+        <label><strong>Especie: </strong></label>
+        <select id="especie" name="especie" required>
             <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
-            <option value="1">Medicina Interna</option>
-            <option value="2">Cardiología</option>
-            <option value="3">Oftalmología</option>
-            <option value="4">Cirugía</option>
-            <option value="5">Radiología</option>
+            <option value="1">Gato</option>
+            <option value="2">Perro</option>
+            <option value="3">Conejo</option>
+            <option value="4">Ave</option>
+            <option value="5">Raton</option>
+            <option value="6">Otro</option>
         </select>
         <br>
+        <br>
+        <label for="fecha"><strong>Fecha de nacimiento: </strong></label>
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" min="1999-01-01" max="2025-12-31" required>
+        <br>
+        <br>
+        <label><strong>Tutor: </strong></label>
+        <select id="nombre_tutor" name="nombre_tutor" required>
+            <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+        </select>
         <!-- Botón que envía el formulario -->
         <!-- El div es como el contenedor -->
         <div>
@@ -40,32 +49,57 @@
         const id = parametrosGet.get('id');
 
         // Definimos la URL donde vamos a enviar los datos usando el método PUT
-        const ruta = `http://localhost:3000/api/doctores/${id}`;
+        const ruta = `http://localhost:3000/api/mascotas/${id}`;
+        const rutaClientes = `http://localhost:3000/api/clientes/`
 
-        // Seleccionamos el formulario usando su ID (idDoctor)
+        // Seleccionamos el formulario usando su ID (idMascota)
         // y los referenciamos a los Id que generamos en el html, para que se puedan comunicar
         //ref linea10
-        const formulario = document.querySelector('#ModificarDoctor');
+        const formulario = document.querySelector('#ModificarMascota');
         //ref linea12
-        const nombreInput = formulario.querySelector('#nombre')
+        const nombreInput = formulario.querySelector('#nombre');
         //ref linea16
-        const especialidadSelector = formulario.querySelector('#especialidad')
+        const especieSelector = formulario.querySelector('#especie');
+        //
+        const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
+        //
+        const tutorSelector = formulario.querySelector('#nombre_tutor');
         //axios es una biblioteca, aca uso el metodo get porque necesito traer los valores
-        //de mi doctor, le paso la ruta en donde estan esos datos ref linea43
-        
+        //de mi mascota, le paso la ruta en donde estan esos datos ref linea52
+
+        //tengo que hacer
+
+        axios.get(rutaClientes)
+        .then(function (respuestaCliente){
+            //traigo los datos de mi cliente
+            const clientes = respuestaCliente.data;
+            console.log (clientes)
+                        
+            for (let i=0 ; i < clientes.lenght ; i++){
+                const cliente = clientes[i];
+                
+
+            }
+
+            
+        });
+
+
         axios.get(ruta)
             .then(function (respuesta) {
-                const doctor = respuesta.data;
-                
-                nombreInput.value = doctor.nombre;
-                //uso la nomenclatura para remplazar que propuse en mi base de datos
-                especialidadSelector.value = doctor.especialidades_id
+                const mascota = respuesta.data;  
+                //uso la nomenclatura para remplazar que propuse en mi base de datos    
+                nombreInput.value = mascota.nombre;
+                especieSelector.value = mascota.especie
+                nacimientoSelector.value = mascota.fecha_nacimiento
+                tutorSelector.value = mascota.clientes_id
+ 
             });
-
+        
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
         //referencia linea 29
         formulario.addEventListener('submit', function (event) {
-        // Esto evita que el formulario recargue la página al enviarse
+            // Esto evita que el formulario recargue la página al enviarse
             event.preventDefault();
 
             // Enviamos una solicitud PUT a la API, con los datos nuevos del formulario
@@ -74,7 +108,11 @@
                 // nombre nuevo del doctor
                 nombre: nombreInput.value,
                 // id de la nueva especialidad seleccionada
-                especialidad: especialidadSelector.value
+                especie: especieSelector.value,
+                //Nueva fecha de nacimiento seleccionada
+               fecha_nacimiento: nacimientoSelector.value,
+               //Nuevo tutor seleccionado
+               clientes_id: tutorSelector.value
             })
                 // Si el doctor se actualizo correctamente, mostramos un mensaje, este mensaje
                 //es el que genere en mi API

@@ -119,8 +119,7 @@ router.delete('/:doctorId', async function (peticion, respuesta) {
     if (doctorId.trim() == "") {
       throw new Error('El id del doctor es requerido.');
     }
-
-    // Consulta SQL para traer los datos de la mascota con ese ID
+  // Consulta SQL para borrar los datos del doctor con ese ID
     const consulta = `DELETE FROM doctores WHERE doctores.id = ?`;
     // Ejecutar la consulta
 
@@ -167,7 +166,7 @@ router.put('/:doctorId', async function (peticion, respuesta) {
     // Se responde con un mensaje de confirmación cuando se
     // realice el cambio porque los datos actualizados se verán al recargar desde el HTML.
     respuesta.json({
-      mensaje: 'El doctor se actualizo correctamente'
+      mensaje: 'Los datos del doctor han sido actualizados'
     });
   } catch (error) {
     console.error('Error al modificar al doctor', error);
