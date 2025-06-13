@@ -42,13 +42,12 @@
 
     <!-- Aquí empieza el código JavaScript -->
     <script>
-
         const parametrosGet = new URLSearchParams(window.location.search);
         // Aca obtenemos el ID, para poder pasarlo 
         const id = parametrosGet.get('id');
         // Definimos la URL donde vamos a enviar los datos usando el método PUT
         const ruta = `http://localhost:3000/api/mascotas/${id}`;
-        const rutaClientes = `http://localhost:3000/api/clientes/`
+        const rutaClientes = `http://localhost:3000/api/clientes/`;
 
         // Seleccionamos el formulario usando su ID (idMascota)
         // y los referenciamos a los Id que generamos en el html, para que se puedan comunicar
@@ -62,7 +61,6 @@
         const fechaCalendario = formulario.querySelector('#fecha_nacimiento');
         //ref linea 32
         const tutorSelector = formulario.querySelector('#nombre_tutor');
-     
 
         //mi axios para poder traer los datos de mi cliente, ya que quiero mostrar el nombre
         //del tutor de mi mascota.
@@ -103,7 +101,6 @@
                 fechaCalendario.value = mascota.fecha_nacimiento.slice(0, 10);
                 //aca debo relacionar el id de mi cliente (asi esta definido en mi BD)
                 tutorSelector.value = mascota.clientes_id;
-
             });
 
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
@@ -122,7 +119,7 @@
                 //Nueva fecha de nacimiento seleccionada
                 fecha_nacimiento: fechaCalendario.value,
                 //Nuevo tutor seleccionado
-                clientes_id: tutorSelector.value
+                clientes_id: Number(tutorSelector.value)
             })
                 // Si el doctor se actualizo correctamente, mostramos un mensaje, este mensaje
                 //es el que genere en mi API

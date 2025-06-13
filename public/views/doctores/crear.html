@@ -1,13 +1,12 @@
 <html>
 <head>
     <!--Este es el nombre que va a tener mi cabecera-->
-    <title>Hanzoft - crear Doctor</title>
+    <title>Hanzoft - Crear Doctor</title>
     
     <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
     <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-
 <body>
     <h1>⚕️ Crear Doctor 👩🏻‍⚕️🧑🏻‍⚕️</h1>
 
@@ -18,7 +17,7 @@
         <!-- Campo para escribir el nombre del doctor -->
         <label>
             <p><strong>Nombre</strong></p>
-            <input type="text" id="nombre" maxlength="30" name="nombre">
+            <input type="text" id="nombre" maxlength="30" name="nombre" required>
             <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
         </label>
 
@@ -63,25 +62,24 @@
             const especialidad = document.getElementById('especialidad').value;
 
             // Enviamos una solicitud POST a la API, con los datos del formulario
-            axios
-                .post(ruta, {
-                    // nombre del doctor
-                    nombre: nombre,             
-                    // id de la especialidad seleccionada
-                    especialidad: especialidad  
-                })
-                // Si el doctor se creó correctamente, mostramos un mensaje
-                .then(function (respuesta) {
-                    alert(respuesta.data.mensaje);
-                    // También lo mostramos en consola
-                    console.log(respuesta.data.mensaje);  
-                    
-                })
-                // Si hubo un error en la petición, mostramos un mensaje de error
-                .catch(function (error) {
-                    alert(error.response.data.error);
-                    console.error(error);
-                });
+            axios.post(ruta, {
+                // nombre del doctor
+                nombre: nombre,             
+                // id de la especialidad seleccionada
+                especialidad: especialidad  
+            })
+            // Si el doctor se creó correctamente, mostramos un mensaje
+            .then(function (respuesta) {
+                alert(respuesta.data.mensaje);
+                // También lo mostramos en consola
+                console.log(respuesta.data.mensaje);  
+                
+            })
+            // Si hubo un error en la petición, mostramos un mensaje de error
+            .catch(function (error) {
+                alert(error.response.data.error);
+                console.error(error);
+            });
         });
     </script>
 </body>

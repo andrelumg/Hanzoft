@@ -38,10 +38,8 @@ router.get('/:mascotaId', async function (peticion, respuesta) {
     const consulta =`SELECT mascotas.id, mascotas.nombre, mascotas.especie, mascotas.fecha_nacimiento, 
     clientes.id AS clientes_id, clientes.nombre AS tutor
     FROM mascotas 
-    INNER JOIN clientes ON mascotas.clientes_id = clientes.id 
+    INNER JOIN clientes ON mascotas.clientes_id = clientes.id
     WHERE mascotas.id = ?`
-
-
 
     // Ejecutar la consulta
     const [rows] = await conexionesDb.query(consulta, [mascotaId]);
@@ -66,7 +64,7 @@ router.post('/', async function (peticion, respuesta) {
     //Yo deberia traer el dato del nombre del cliente por lo que lo creo aca
     // y lo casteo como numero para poderlo asociar, en el html creare
     //una lista en donde mostrare los datos completos
-    const clientesId = Number(datos.clientes_id);
+    const clientesId = datos.clientes_id;
 
     //aca estoy declarando la consulta que me ayuda a validar que datos
     //debo ingresar en mi nueva mascota
@@ -134,5 +132,41 @@ router.delete('/:mascotaId', async function (peticion, respuesta) {
     });
   }
 });
+
+// Ruta PUT para obtener los datos de un doctor por su ID y modificarlos
+router.put('/:mascotaId', async function (peticion, respuesta) {
+  // Obtener el ID de la mascota  desde los parámetros de la URL
+  const mascotaId = peticion.params.mascotaId;
+  // Manejo de errores con try...catch
+  try {
+    //aquí se guardan los datos que el usuario envió desde el formulario o cliente frontend
+    const datos = peticion.body;
+    
+    const nombre = datos.nombre;
+    const especie = datos.especie;
+    const fecha_nacimiento = datos.fecha_nacimiento;
+    const clientesId = datos.clientes_id;
+    // Consulta SQL para modificar los datos del doctor desde su ID
+    //una vez se asigne el resultado de la consulta, procedo a ejecutar la modificacion
+
+    const consultaModificacion = `UPDATE mascotas
+      SET mascotas.nombre = ?, mascotas.especie = ?, mascotas.fecha_nacimiento= ?, mascotas.clientes_id= ?
+      WHERE mascotas.id = ?`
+
+    // Aca le paso los tres parametros aunque solament se realicen dos,porque necesito el ID
+    await conexionesDb.query(consultaModificacion, [nombre, especie, fecha_nacimiento, clientesId, mascotaId]);
+    // Se responde con un mensaje de confirmación cuando se
+    // realice el cambio porque los datos actualizados se verán al recargar desde el HTML.
+    respuesta.json({
+      mensaje: 'Los datos de la mascota han sido actualizados'
+    });
+  } catch (error) {
+    console.error('Error al modificar la mascota', error);
+    respuesta.status(500).json({
+      error: 'Error en el servidor',
+    });
+  }
+});
+
 
 module.exports = router;

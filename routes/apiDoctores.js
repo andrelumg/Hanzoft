@@ -158,8 +158,7 @@ router.put('/:doctorId', async function (peticion, respuesta) {
     const consultaModificacion = `
       UPDATE doctores
       SET doctores.nombre = ?, doctores.especialidades_id = ?
-      WHERE doctores.id = ?
-    `
+      WHERE doctores.id = ?`
 
     // Aca le paso los tres parametros aunque solament se realicen dos,porque necesito el ID
     await conexionesDb.query(consultaModificacion, [nombre, especialidades_id, doctorId]);

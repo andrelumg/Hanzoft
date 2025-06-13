@@ -87,9 +87,7 @@
                 }
 
                 tutorSelector.innerHTML = miHtml;
-
             });
-
 
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
         formulario.addEventListener('submit', function (event) {
@@ -103,7 +101,6 @@
             // Obtenemos el calor que indico el usuario en telefono
             const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
 
-
             axios.post(ruta, {
                 // nombre del cliente
                 nombre: nombre,
@@ -113,21 +110,19 @@
                 fecha_nacimiento: fecha_nacimiento,
                 // Responsable asignado
                 clientes_id: Number(tutorSelector.value)
+            })
+            // Si el cliente se creó correctamente, mostramos un mensaje
+            .then(function (respuesta) {
+                alert(respuesta.data.mensaje);
+                // También lo mostramos en consola
+                console.log(respuesta.data.mensaje);
 
             })
-
-                // Si el cliente se creó correctamente, mostramos un mensaje
-                .then(function (respuesta) {
-                    alert(respuesta.data.mensaje);
-                    // También lo mostramos en consola
-                    console.log(respuesta.data.mensaje);
-
-                })
-                // Si hubo un error en la petición, mostramos un mensaje de error
-                .catch(function (error) {
-                    alert(error.response.data.error);
-                    console.error(error);
-                });
+            // Si hubo un error en la petición, mostramos un mensaje de error
+            .catch(function (error) {
+                alert(error.response.data.error);
+                console.error(error);
+            });
         });
     </script>
 </body>

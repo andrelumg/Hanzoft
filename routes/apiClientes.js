@@ -35,8 +35,10 @@ router.get('/:clienteId', async function (peticion, respuesta) {
   // Manejo de errores con try...catch
   try {
     // Consulta SQL para traer los datos de la cliente con ese ID
-    const consulta = `SELECT * FROM clientes 
-    WHERE id = ?`;
+    const consulta = `
+      SELECT * FROM clientes 
+      WHERE id = ?
+    `;
 
     // Ejecutar la consulta
     const [rows] = await conexionesDb.query(consulta, [clienteId]);
@@ -53,6 +55,7 @@ router.get('/:clienteId', async function (peticion, respuesta) {
   }
 });
 
+//Metodo para poder agregar un cliente
 router.post('/', async function (peticion, respuesta) {
   //try catch para controlar si llega a haber un error.
 
