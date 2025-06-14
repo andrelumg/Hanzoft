@@ -84,4 +84,72 @@ router.post('/', async function (peticion, respuesta) {
   }
 })
 
+//eliminar
+router.delete('/:clienteId', async function (peticion, respuesta) {
+  //Obtengo el Id del cliente desde los parametros de la URL
+
+  const clienteId = peticion.params.clienteId;
+
+  try {
+    if (clienteId.trim() == "") {
+      throw new Error('El id de la mascota es requerido.');
+    }
+
+    const consulta = `DELETE FROM clientes 
+    WHERE clientes.id = ?`
+
+    await conexionesDb.query(consulta, [clienteId]);
+
+    respuesta.json({
+      //Si logro eliminar pongo este mensaje 
+      mensaje: 'Cliente eliminado exitosamente.'
+    });
+
+  } catch (error) {
+    console.error('Error en el cliente', error);
+
+    respuesta.status(500).json({
+      error: 'Error en el servidor',
+    })
+
+  };
+});
+
+//Modificar Cliente
+
+// Ruta PUT para obtener los datos de uuna mascota por su ID y modificarlos
+router.put('/:clienteId', async function (peticion, respuesta) {
+  // Obtener el ID de la mascota  desde los parámetros de la URL
+  const clienteId = peticion.params.clienteId;
+  // Manejo de errores con try...catch
+  try {
+    //aquí se guardan los datos que el usuario envió desde el formulario o cliente frontend
+    const datos = peticion.body;
+    
+    const nombre = datos.nombre;
+    const email = datos.email;
+    const telefono = datos.telefono;
+    const cedula = datos.cedula;
+    // Consulta SQL para modificar los datos del doctor desde su ID
+    //una vez se asigne el resultado de la consulta, procedo a ejecutar la modificacion
+
+    const consultaModificacion = `UPDATE clientes
+      SET clientes.nombre = ?, clientes.email = ?, clientes.telefono= ?, clientes.cedula= ?
+      WHERE clientes.id = ?`
+
+    // Aca le paso los tres parametros aunque solament se realicen dos,porque necesito el ID
+    await conexionesDb.query(consultaModificacion, [nombre, email, telefono, cedula, clienteId]);
+    // Se responde con un mensaje de confirmación cuando se
+    // realice el cambio porque los datos actualizados se verán al recargar desde el HTML.
+    respuesta.json({
+      mensaje: 'Los datos del cliente han sido actualizados'
+    });
+  } catch (error) {
+    console.error('Error al modificar el cliente', error);
+    respuesta.status(500).json({
+      error: 'Error en el servidor',
+    });
+  }
+});
+
 module.exports = router;

@@ -121,7 +121,7 @@
                 //Nuevo tutor seleccionado
                 clientes_id: Number(tutorSelector.value)
             })
-                // Si el doctor se actualizo correctamente, mostramos un mensaje, este mensaje
+                // Si la mascota se actualizo correctamente, mostramos un mensaje, este mensaje
                 //es el que genere en mi API
                 .then(function (respuesta) {
                     alert(respuesta.data.mensaje);
@@ -130,7 +130,7 @@
                     //una vez el mensaje cargue la idea es que volvamos a la lista de doctores
                     //por lo que usamos una libreria que nos ayude con eso
                     //pasandole la url a la que vamos a volver
-                    window.location.href = 'http://localhost:3000/app/mascotas.html'
+                    window.location.href = 'http://localhost:3000/app/mascotas/listar.html'
 
                 })
                 // Si hubo un error en la petición, es decir no se hizo bien el proceso

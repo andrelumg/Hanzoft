@@ -1,18 +1,17 @@
 <html>
-<head>
-    <title>Hanzoft - Clientes</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <head>
+        <title>Hanzoft - Usuarios</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <h1>🧍🏾‍♂️ Listado de Clientes 🧍🏻‍♀️</h1>
+        <h1>👨🏿‍⚕️ Lista de Usuarios 👩🏿‍⚕️</h1>
         <table>
             <thead>
                <tr>
-                    <td><strong>Id</strong></td>
-                    <td><strong>Nombre</strong></td>
-                    <td><strong>Email</strong></td>
-                    <td><strong>telefono</strong></td>
-                    <td><strong>Cedula</strong></td>
+                    <td>ID</td>
+                    <td>Nombres</td>
+                    <td>Email</td>
+                    <td>Rol</td>
                     <td></td>
                     <td></td>
                </tr> 
@@ -22,48 +21,48 @@
             </tbody>
         </table>
         <script>
-            const rutaBaseFront = 'http://localhost:3000/app';
-            const ruta = `http://localhost:3000/api/clientes`; 
-            const rutaModificar = `${rutaBaseFront}/clientes/actualizar.html`;
+            const ruta = `http://localhost:3000/api/usuarios`;
+            const rutaModificar = `http://localhost:3000/app/usuarios/actualizar.html`
 
             axios.get(ruta)
                 .then(function (response) {
-                    const clientes = response.data;
+                    const usuarios = response.data;
 
                     const tabla = document.querySelector('table tbody');
                     let cuerpoHtml = '';
 
-                    for (const cliente of clientes) {
+                    for (const usuario of usuarios) {
                         let filaHtml = '';
                         filaHtmlL = '<tr>'
-                        filaHtml += '<td>' + cliente.id + '</td>'
-                        filaHtml += '<td>' + cliente.nombre + '</td>'
-                        filaHtml += '<td>' + cliente.email + '</td>'
-                        filaHtml += '<td>' + cliente.telefono + '</td>'
-                        filaHtml += '<td>' + cliente.cedula + '</td>'
-                        filaHtml += `<td><a href="${rutaModificar}?id=${cliente.id}">Modificar</a></td>`
-                        filaHtml += `<td><button class="eliminar-cliente" data-id="${cliente.id}">Eliminar 🗑️</button></td>`
+                        filaHtml += '<td>' + usuario.id + '</td>'
+                        filaHtml += '<td>' + usuario.nombre + '</td>'
+                        filaHtml += '<td>' + usuario.email + '</td>'
+                        filaHtml += '<td>' + usuario.rol + '</td>'
+                        filaHtml += `<td><a href="${rutaModificar}?id=${usuario.id}">Modificar</a></td>`
+                        filaHtml += `<td><button class="eliminar-usuario" data-id=${usuario.id}>Editar 🟢</button></td>`
                         filaHtml += '</tr>'
                         cuerpoHtml += filaHtml;
                     }
+
                     tabla.innerHTML = cuerpoHtml
+
                     // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
                     //la accion que estoy haciendo
-                    const botonesEliminar = tabla.querySelectorAll('.eliminar-cliente');
+                    const botonesEliminar = tabla.querySelectorAll('.eliminar-usuario');
                     //realizo un for each para poder recorrer la tabla 
                     botonesEliminar.forEach(function(botonEliminar){
                     //añado un evento click para que se ejecute:    
                         botonEliminar.addEventListener('click', function(){
                             //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
-                            const clienteId = botonEliminar.getAttribute('data-id')
+                            const usuarioId = botonEliminar.getAttribute('data-id')
                             //Hago referencia a la ruta de la linea 26, en donde obtender el id
-                            //de la mascota a eliminar.
-                            const rutaEliminar = ruta + '/' + clienteId;
+                            //del usuario a eliminar.
+                            const rutaEliminar = ruta + '/' + usuarioId;
 
                             //Hare una pregunta de confirmacion en caso de que por error
-                            //se haya indicado que se queria eliminar a la mascota
+                            //se haya indicado que se queria eliminar el usuario
 
-                            if(confirm('Esta seguro que desea eliminar este cliente?')){
+                            if(confirm('Esta seguro que desea eliminar este usuario?')){
                                 //llamo otra vez un ajax (axios) par que me ayude a gestionar
                                 axios.delete(rutaEliminar).then(function(respuesta){
                                     alert(respuesta.data.mensaje);
@@ -76,6 +75,8 @@
 
 
                     });
+
+
                 });
         </script>
     </body>

@@ -1,0 +1,111 @@
+<html>
+
+<head>
+    <title>Hanzoft - Modificar Cliente</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>🙋🏽‍♂️ Informacion del cliente 🙋🏻‍♀️</h1>
+    <form id="ModificarCliente">
+        <label for="nombre"><strong> Nombre del cliente : </strong></label>
+        <input type="text" id="nombre" name="nombre" maxlength="30" required>
+        <br>
+        <br>
+        <label for="correo"><strong>Email: </strong></label>
+        <input type="text" id="correo" name="correo" maxlength="45" required>
+        <br>
+        <br>
+        <label for="telefono"><strong>Numero de contacto: </strong></label>
+        <input type="text" id="telefono" name="telefono" maxlength="13" required>
+        <br>
+        <br>
+        <label for="cedula"><strong>Numero de documento: </strong></label>
+        <input type="text" id="cedula" name="cedula" maxlength="11" required>
+        <!-- Botón que envía el formulario -->
+        <!-- El div es como el contenedor -->
+        <div>
+            <br>
+            <button type="submit"> Guardar Cambios 💾 </button>
+        </div>
+    </form>
+
+    <!-- Aquí empieza el código JavaScript -->
+    <script>
+        const parametrosGet = new URLSearchParams(window.location.search);
+        // Aca obtenemos el ID, para poder pasarlo 
+        const id = parametrosGet.get('id');
+        // Definimos la URL donde vamos a enviar los datos usando el método PUT
+        const ruta = `http://localhost:3000/api/clientes/${id}`;
+
+        // Seleccionamos el formulario usando su ID (idClientes)
+
+        const formulario = document.querySelector('#ModificarCliente');
+
+        const nombreInput = formulario.querySelector('#nombre');
+
+        const correoInput = formulario.querySelector('#correo');
+
+        const telefonoInput = formulario.querySelector('#telefono');
+
+        const cedulaInput = formulario.querySelector('#cedula');
+
+        //mi axios para poder traer los datos de mi cliente, ya que quiero mostrar el nombre
+        //del tutor de mi mascota.
+        
+
+        axios.get(ruta)
+            .then(function (respuesta) {
+                const cliente = respuesta.data;
+                //uso la nomenclatura para remplazar que propuse en mi base de datos  
+                //  
+                nombreInput.value = cliente.nombre;
+                correoInput.value = cliente.email;
+                //el slice se usa para traer una parte de mi cadena serian ejemplo 
+                //12-23-2009 (10 caracteres de mi dato) 
+                telefonoInput.value = cliente.telefono
+                //aca debo relacionar el id de mi cliente (asi esta definido en mi BD)
+                cedulaInput.value = cliente.cedula;
+            });
+
+        // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
+        //referencia linea 29
+        formulario.addEventListener('submit', function (event) {
+            // Esto evita que el formulario recargue la página al enviarse
+            event.preventDefault();
+
+            // Enviamos una solicitud PUT a la API, con los datos nuevos del formulario
+            //recordemos que la ruta es la que referenciamos en la linea43
+            axios.put(ruta, {
+                // nombre nuevo del doctor
+                nombre: nombreInput.value,
+                // id de la nueva especialidad seleccionada
+                email: correoInput.value,
+                //Nueva fecha de nacimiento seleccionada
+                telefono: telefonoInput.value,
+                //Nuevo tutor seleccionado
+                cedula: cedulaInput.value
+            })
+                // Si el cliente se actualizo correctamente, mostramos un mensaje, este mensaje
+                //es el que genere en mi API
+                .then(function (respuesta) {
+                    alert(respuesta.data.mensaje);
+                    // También lo mostramos en consola, para validar si quedo bien
+                    console.log(respuesta.data.mensaje);
+                    //una vez el mensaje cargue la idea es que volvamos a la lista de doctores
+                    //por lo que usamos una libreria que nos ayude con eso
+                    //pasandole la url a la que vamos a volver
+                    window.location.href = 'http://localhost:3000/app/clientes/listar.html'
+
+                })
+                // Si hubo un error en la petición, es decir no se hizo bien el proceso
+                // mostramos un mensaje de error, tanto en el navegador como en nuestra consola
+                .catch(function (error) {
+                    alert(error.response.data.error);
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+
+</html>

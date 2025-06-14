@@ -133,7 +133,7 @@ router.delete('/:mascotaId', async function (peticion, respuesta) {
   }
 });
 
-// Ruta PUT para obtener los datos de un doctor por su ID y modificarlos
+// Ruta PUT para obtener los datos de uuna mascota por su ID y modificarlos
 router.put('/:mascotaId', async function (peticion, respuesta) {
   // Obtener el ID de la mascota  desde los parámetros de la URL
   const mascotaId = peticion.params.mascotaId;

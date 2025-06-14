@@ -22,10 +22,10 @@
             </tbody>
         </table>
         <script>
-            const rutaBase = 'http://localhost:3000/api';
+
             const rutaBaseFront = 'http://localhost:3000/app';
-            const ruta = `${rutaBase}/mascotas`;
-            const rutaModificar =`${rutaBaseFront}/actualizarMascota.html`;
+            const ruta = `http://localhost:3000/api/mascotas`;
+            const rutaModificar =`${rutaBaseFront}/mascotas/actualizar.html`;
                 
             axios.get(ruta)
                 .then(function (response) {
@@ -37,7 +37,7 @@
                     for (const mascota of mascotas) {
                         let filaHtml = '';
                         filaHtml = '<tr>';
-                        filaHtml += '<td>' + mascota.id + '</td>'
+                        filaHtml += '<td>' + mascota.id + '</td>'   
                         filaHtml += '<td>' + mascota.nombre + '</td>'
                         filaHtml += '<td>' + mascota.especie + '</td>'
                         filaHtml += '<td>' + mascota.fecha_nacimiento + '</td>'
