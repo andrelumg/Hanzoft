@@ -39,42 +39,12 @@
                         filaHtml += '<td>' + usuario.email + '</td>'
                         filaHtml += '<td>' + usuario.rol + '</td>'
                         filaHtml += `<td><a href="${rutaModificar}?id=${usuario.id}">Modificar</a></td>`
-                        filaHtml += `<td><button class="eliminar-usuario" data-id=${usuario.id}>Editar 🟢</button></td>`
                         filaHtml += '</tr>'
                         cuerpoHtml += filaHtml;
                     }
 
                     tabla.innerHTML = cuerpoHtml
 
-                    // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
-                    //la accion que estoy haciendo
-                    const botonesEliminar = tabla.querySelectorAll('.eliminar-usuario');
-                    //realizo un for each para poder recorrer la tabla 
-                    botonesEliminar.forEach(function(botonEliminar){
-                    //añado un evento click para que se ejecute:    
-                        botonEliminar.addEventListener('click', function(){
-                            //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
-                            const usuarioId = botonEliminar.getAttribute('data-id')
-                            //Hago referencia a la ruta de la linea 26, en donde obtender el id
-                            //del usuario a eliminar.
-                            const rutaEliminar = ruta + '/' + usuarioId;
-
-                            //Hare una pregunta de confirmacion en caso de que por error
-                            //se haya indicado que se queria eliminar el usuario
-
-                            if(confirm('Esta seguro que desea eliminar este usuario?')){
-                                //llamo otra vez un ajax (axios) par que me ayude a gestionar
-                                axios.delete(rutaEliminar).then(function(respuesta){
-                                    alert(respuesta.data.mensaje);
-                                    window.location.reload();
-                                })
-                            }
-
-                        });
-
-
-
-                    });
 
 
                 });

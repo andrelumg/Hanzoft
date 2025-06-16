@@ -1,57 +1,70 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
     <!--Este es el nombre que va a tener mi cabecera-->
     <title>Hanzoft - Crear mascota</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
     <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <h1>🐱 Crear Mascota 🐺</h1>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center">🐱 Crear Mascota 🐺</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form id="formulario-mascota" class="col">
+                <a href="http://localhost:3000/app/mascotas/listar.html" class="btn btn-outline-secondary mb-4">
+                    Regresar
+                </a>
+                <!-- Campo para escribir el nombre del doctor -->
+                <label for="nombre" class="form-label w-100 mb-2">
+                    <p><strong>Nombre de mascota: </strong></p>
+                    <input type="text" id="nombre" class="form-control" maxlength="30" name="nombre" required>
+                    <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
+                </label>
+
+                <label for="especie" class="form-label w-100 mb-2">
+                    <p><strong>Especie Mascota: </strong></p>
+                    <select id="especie" name="especie" class="form-select mb-3" required>
+                        <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+                        <option value="gato">Gato</option>
+                        <option value="perro">Perro</option>
+                        <option value="conejo">Conejo</option>
+                        <option value="ave">Ave</option>
+                        <option value="raton">Raton</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </label>
+                <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
+                <label for="fecha_nacimiento" class="form-label w-100 mb-2">
+                    <p><strong>Fecha de Nacimiento Mascota: </strong></p>
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" min="1999-01-01" max="2025-12-31" required>
+                </label>
+                <label class="form-label w-100 mb-2">
+                    <p><strong>Responsable de la mascota: </strong></p>
+                    <select id="nombre_tutor" name="nombre_tutor" class="form-select" required>
+                        <!-- Cada opción tiene un número como "value" que representa el ID del cliente en la base de datos -->
+                    </select>
+                </label>
+                <!-- Botón que envía el formulario -->
+                <hr/>
+                <input type="submit" value="Crear" class="btn btn-outline-primary"/>
+            </form>
+        </div>
+    </div>
 
     <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
     <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
-    <form id="formulario-mascota">
-
-        <!-- Campo para escribir el nombre del doctor -->
-        <label>
-            <p><strong>Nombre de mascota: </strong></p>
-            <input type="text" id="nombre" maxlength="30" name="nombre" required>
-            <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
-        </label>
-        <label>
-            <p><strong>Especie Mascota: </strong></p>
-        </label>
-        <select id="especie" name="especie" required>
-            <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
-            <option value="gato">Gato</option>
-            <option value="perro">Perro</option>
-            <option value="conejo">Conejo</option>
-            <option value="ave">Ave</option>
-            <option value="raton">Raton</option>
-            <option value="otro">Otro</option>
-        </select>
-        <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
-        <label>
-            <p><strong>Fecha de Nacimiento Mascota: </strong></p>
-
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" min="1999-01-01" max="2025-12-31" required>
-        </label>
-        <label>
-            <p></p><strong>Responsable de la mascota: </strong></p>
-        </label>
-        <select id="nombre_tutor" name="nombre_tutor" required>
-            <!-- Cada opción tiene un número como "value" que representa el ID del cliente en la base de datos -->
-        </select>
-        <!-- Botón que envía el formulario -->
-        <div>
-            <br>
-            <input type="submit" value="Crear ✅">
-        </div>
-    </form>
 
     <!-- Aquí empieza el código JavaScript -->
     <script>
