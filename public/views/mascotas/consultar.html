@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Hanzoft - Mascota</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Bundle de Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center mb-4">Mostrar Mascota</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <a href="http://localhost:3000/app/mascotas/listar.html" class="btn btn-outline-success mb-4">
+                    &lt; atras </a>
+                <a id="botonModificacion" href="http://localhost:3000/app/mascotas/actualizar.html" 
+                    class="btn btn-outline-primary mb-4">Modificar</a>
+
+                <table class="table table-striped table-hover table-bordered">
+
+                    <thead>
+                        <tr>
+                            <td><b>Campo</b></td>
+                            <td><b>Información</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>id</td>
+                            <td id="id"></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre</td>
+                            <td id="nombre"></td>
+                        </tr>
+                        <tr>
+                            <td>Especie</td>
+                            <td id="especie"></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de Nacimiento</td>
+                            <td id="fecha_nacimiento"></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre del tutor</td>
+                            <td id="nombre_tutor"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h2 style="display: none;">El Id es requerido</h2>
+        </div>
+    </div>
+    <script>
+        const parametrosGet = new URLSearchParams(window.location.search);
+        const id = parametrosGet.get('id');
+
+        if (id === null) {
+            const error = document.querySelector('h2');
+            error.style.removeProperty('display');
+        } else {
+            const rutaBase = `http://localhost:3000/api`;
+            const ruta = `${rutaBase}/mascotas/${id}`;
+            const rutaModificar = `http://localhost:3000/app/mascotas/actualizar.html?id=${id}`;
+            const botonModificar = document.querySelector('#botonModificacion');
+
+            botonModificar.setAttribute('href', rutaModificar);
+
+            axios.get(ruta)
+                .then(function (respuesta) {
+                    const mascota = respuesta.data;
+
+                    const idCelda = document.querySelector('#id')
+                    const nombreCelda = document.querySelector('#nombre')
+                    const especieCelda = document.querySelector('#especie')
+                    const fechaCelda = document.querySelector('#fecha_nacimiento')
+                    const tutorCelda = document.querySelector('#nombre_tutor')
+
+                    idCelda.textContent = mascota.id;
+                    nombreCelda.textContent = mascota.nombre;
+                    especieCelda.textContent = mascota.especie
+                    fechaCelda.textContent = mascota.fecha_nacimiento.slice(0,10);
+                    tutorCelda.textContent = mascota.tutor;
+                });
+        }
+    </script>
+</body>
+
+</html>

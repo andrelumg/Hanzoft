@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Hanzoft - Mascotas</title>
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -39,7 +40,7 @@
         </div>
         <script>
 
-            const rutaBaseFront = 'http://localhost:3000/app';
+            const rutaBaseFront = `http://localhost:3000/app`;
             const ruta = `http://localhost:3000/api/mascotas`;
             const rutaModificar =`${rutaBaseFront}/mascotas/actualizar.html`;
                 
@@ -54,9 +55,9 @@
                         let filaHtml = '';
                         filaHtml = '<tr>';
                         filaHtml += '<td>' + mascota.id + '</td>'   
-                        filaHtml += '<td>' + mascota.nombre + '</td>'
+                        filaHtml += `<td><a href="${rutaBaseFront}/mascotas/consultar.html?id=${mascota.id}" class="text-decoration-none">${mascota.nombre}</a></td>`;
                         filaHtml += '<td>' + mascota.especie + '</td>'
-                        filaHtml += '<td>' + mascota.fecha_nacimiento + '</td>'
+                        filaHtml += '<td>' + mascota.fecha_nacimiento.slice(0,10) + '</td>'
                         filaHtml += '<td>' + mascota.cliente + '</td>'
                         filaHtml += `<td><a href="${rutaModificar}?id=${mascota.id}" class="btn btn-outline-primary">Modificar</a></td>`
                         filaHtml += `<td><button class="eliminar-mascota btn btn-outline-danger" data-id="${mascota.id}">Eliminar</button></td>`
