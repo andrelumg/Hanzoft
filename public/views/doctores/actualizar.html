@@ -1,34 +1,52 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
     <title>Hanzoft - Modificar Doctor</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Bundle de Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <h1>Informacion del Doctor 🐾</h1>
-    <form id="ModificarDoctor">
-        <label for="nombre"><strong> Nombre del Doctor : </strong></label>
-        <input type="text" id="nombre" name="nombre" maxlength="30">
-        <br>
-        <br>
-        <label><strong>Especialidad: </strong></label>
-        <select id="especialidad" name="especialidad" required>
-            <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
-            <option value="1">Medicina Interna</option>
-            <option value="2">Cardiología</option>
-            <option value="3">Oftalmología</option>
-            <option value="4">Cirugía</option>
-            <option value="5">Radiología</option>
-        </select>
-        <br>
-        <!-- Botón que envía el formulario -->
-        <!-- El div es como el contenedor -->
-        <div>
-            <br>
-            <button type="submit"> Guardar Cambios 💾 </button>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center mb-4">Informacion del Doctor 📇🐾</h1>
+            </div>
         </div>
-    </form>
+
+        <div class="row">
+            <form id="ModificarDoctor" class="col">
+                <a href="http://localhost:3000/app/doctores/listar.html" class="btn btn-outline-success mb-4"> &lt; Atras</a>
+
+                <label for="nombre" class="form-label w-100 mb-2"><strong> Nombre del Doctor : </strong></label>
+                <input type="text" id="nombre" name="nombre" class="form-control mb-3" maxlength="30" required>
+
+                <label for="especialidad" class="form-label w100 mb-2"><strong>Especialidad: </strong></label>
+                <select id="especialidad" name="especialidad" required class="form-select mb-3">
+                    <!-- Cada opción tiene un número como "value" que representa el ID de la especialidad en la base de datos -->
+                    <option value="1">Medicina Interna</option>
+                    <option value="2">Cardiología</option>
+                    <option value="3">Oftalmología</option>
+                    <option value="4">Cirugía</option>
+                    <option value="5">Radiología</option>
+                </select>
+                <!-- Botón que envía el formulario -->
+                <!-- El div es como el contenedor -->
+                <div>
+                    <button type="submit" class="btn btn-outline-primary"> Guardar Cambios </button>
+                </div>
+        </div>
+        </form>
+    </div>
 
     <!-- Aquí empieza el código JavaScript -->
     <script>
@@ -52,11 +70,11 @@
         const especialidadSelector = formulario.querySelector('#especialidad')
         //axios es una biblioteca, aca uso el metodo get porque necesito traer los valores
         //de mi doctor, le paso la ruta en donde estan esos datos ref linea43
-        
+
         axios.get(ruta)
             .then(function (respuesta) {
                 const doctor = respuesta.data;
-                
+
                 nombreInput.value = doctor.nombre;
                 //uso la nomenclatura para remplazar que propuse en mi base de datos
                 especialidadSelector.value = doctor.especialidades_id
@@ -65,7 +83,7 @@
         // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
         //referencia linea 29
         formulario.addEventListener('submit', function (event) {
-        // Esto evita que el formulario recargue la página al enviarse
+            // Esto evita que el formulario recargue la página al enviarse
             event.preventDefault();
 
             // Enviamos una solicitud PUT a la API, con los datos nuevos del formulario

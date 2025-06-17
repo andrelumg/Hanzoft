@@ -1,66 +1,89 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Hanzoft - Doctores</title>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    </head>
-    <body>
-        <h1>Listado de doctores</h1>
-        <table>
-            <thead>
-               <tr>
-                    <td>ID</td>
-                    <td>Nombre</td>
-                    <td>Especialidad</td>
-                    <td></td>
-                    <td></td>
-               </tr> 
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-        <script>
-            const rutaBase = 'http://localhost:3000/api';
-            const ruta = `${rutaBase}/doctores`;
-            const rutaModificar = `http://localhost:3000/app/doctores/actualizar.html`;
+<head>
+    <title>Hanzoft - Doctores</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
 
-            axios.get(ruta)
-                .then(function (response) {
-                    const doctores = response.data;
+<body>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center mb-4">Listado de doctores 👩🏻‍🔬💉</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="http://localhost:3000/app/doctores/crear.html" class="btn btn-outline-success mb-4">
+                    + Crear
+                </a>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="text-center">
+                        <tr>
+                            <td><strong>Id</strong></td>
+                            <td><strong>Nombre</strong></td>
+                            <td><strong>Especialidad</strong></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const rutaBase = 'http://localhost:3000/api';
+        const ruta = `${rutaBase}/doctores`;
+        const rutaModificar = `http://localhost:3000/app/doctores/actualizar.html`;
+        const rutaConsultar = `http://localhost:3000/app/doctores/consultar.html`
 
-                    const tabla = document.querySelector('table tbody');
-                    let cuerpoHtml = '';
+        axios.get(ruta)
+            .then(function (response) {
+                const doctores = response.data;
 
-                    for (const doctor of doctores) {
-                        let filaHtml = '';
-                        filaHtml = '<tr>'
-                        filaHtml += '<td>' + doctor.id + '</td>'
-                        filaHtml += '<td>' + doctor.doctor  + '</td>'
-                        filaHtml += '<td>' + doctor.especialidad + '</td>'
-                        filaHtml += `<td><a href="${rutaModificar}?id=${doctor.id}">Modificar</a></td>`
-                        filaHtml += `<td><button class="eliminar-doctor" data-id="${doctor.id}">Eliminar</button></td>`
-                        filaHtml += '</tr>'
-                        cuerpoHtml += filaHtml;
-                    }
+                const tabla = document.querySelector('table tbody');
+                let cuerpoHtml = '';
 
-                    tabla.innerHTML = cuerpoHtml
+                for (const doctor of doctores) {
+                 
+                    let filaHtml = '';
+                    filaHtml = '<tr>'
+                    filaHtml += '<td class="text-center">' + doctor.id + '</td>'
+                    filaHtml += `<td class="text-center"><a href="${rutaConsultar}?id=${doctor.id}" class="text-decoration-none">${doctor.doctor} </td>`
+                    filaHtml += '<td class="text-center">' + doctor.especialidad + '</td>'
+                    filaHtml += `<td class="text-center"><a href="${rutaModificar}?id=${doctor.id}" class="btn btn-outline-primary" >Modificar</a></td>`
+                    filaHtml += `<td class="text-center"><button class="eliminar-doctor btn btn-outline-danger" data-id="${doctor.id}" >Eliminar</button></td>`
+                    filaHtml += '</tr>'
+                    cuerpoHtml += filaHtml;
+                }
 
-                    const botonesEliminar = tabla.querySelectorAll('.eliminar-doctor');
-                    
-                    botonesEliminar.forEach(function (botonEliminar){
-                        botonEliminar.addEventListener('click', function () {
-                            const doctorId = botonEliminar.getAttribute('data-id')
-                            const rutaEliminar = ruta + '/' + doctorId;
+                tabla.innerHTML = cuerpoHtml
 
-                            if (confirm('Esta seguro que desea eliminar el doctor?')) {
-                                axios.delete(rutaEliminar).then(function(respuesta) {
-                                    alert(respuesta.data.mensaje);
-                                    window.location.reload();
-                                });
-                            }
-                        });
+                const botonesEliminar = tabla.querySelectorAll('.eliminar-doctor');
+
+                botonesEliminar.forEach(function (botonEliminar) {
+                    botonEliminar.addEventListener('click', function () {
+                        const doctorId = botonEliminar.getAttribute('data-id')
+                        const rutaEliminar = ruta + '/' + doctorId;
+
+                        if (confirm('Esta seguro que desea eliminar el doctor?')) {
+                            axios.delete(rutaEliminar).then(function (respuesta) {
+                                alert(respuesta.data.mensaje);
+                                window.location.reload();
+                            });
+                        }
                     });
                 });
-        </script>
-    </body>
+            });
+    </script>
+</body>
+
 </html>

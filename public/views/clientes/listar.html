@@ -1,82 +1,111 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <title>Hanzoft - Clientes</title>
+    <meta charset="uft-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Bundle de Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    </head>
-    <body>
-        <h1>🧍🏾‍♂️ Listado de Clientes 🧍🏻‍♀️</h1>
-        <table>
-            <thead>
-               <tr>
-                    <td><strong>Id</strong></td>
-                    <td><strong>Nombre</strong></td>
-                    <td><strong>Email</strong></td>
-                    <td><strong>telefono</strong></td>
-                    <td><strong>Cedula</strong></td>
-                    <td></td>
-                    <td></td>
-               </tr> 
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-        <script>
-            const rutaBaseFront = 'http://localhost:3000/app';
-            const ruta = `http://localhost:3000/api/clientes`; 
-            const rutaModificar = `${rutaBaseFront}/clientes/actualizar.html`;
+</head>
 
-            axios.get(ruta)
-                .then(function (response) {
-                    const clientes = response.data;
+<body>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center mb-4">🧍🏾‍♂️ Listado de Clientes 🧍🏻‍♀️</h1>
+            </div>
+        </div>
+        <a href="http://localhost:3000/app/clientes/crear.html" class="btn btn-outline-success mb-4" > + Crear </a>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-hover table-bordered">
 
-                    const tabla = document.querySelector('table tbody');
-                    let cuerpoHtml = '';
+                    <thead>
+                        <tr>
+                            <td class="text-center"><strong>Id</strong></td>
+                            <td class="text-center"><strong>Nombre</strong></td>
+                            <td class="text-center"><strong>Email</strong></td>
+                            <td class="text-center"><strong>telefono</strong></td>
+                            <td class="text-center"><strong>Cedula</strong></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    for (const cliente of clientes) {
-                        let filaHtml = '';
-                        filaHtmlL = '<tr>'
-                        filaHtml += '<td>' + cliente.id + '</td>'
-                        filaHtml += '<td>' + cliente.nombre + '</td>'
-                        filaHtml += '<td>' + cliente.email + '</td>'
-                        filaHtml += '<td>' + cliente.telefono + '</td>'
-                        filaHtml += '<td>' + cliente.cedula + '</td>'
-                        filaHtml += `<td><a href="${rutaModificar}?id=${cliente.id}">Modificar</a></td>`
-                        filaHtml += `<td><button class="eliminar-cliente" data-id="${cliente.id}">Eliminar 🗑️</button></td>`
-                        filaHtml += '</tr>'
-                        cuerpoHtml += filaHtml;
-                    }
-                    tabla.innerHTML = cuerpoHtml
-                    // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
-                    //la accion que estoy haciendo
-                    const botonesEliminar = tabla.querySelectorAll('.eliminar-cliente');
-                    //realizo un for each para poder recorrer la tabla 
-                    botonesEliminar.forEach(function(botonEliminar){
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const rutaBaseFront = 'http://localhost:3000/app';
+        const ruta = `http://localhost:3000/api/clientes`;
+        const rutaModificar = `${rutaBaseFront}/clientes/actualizar.html`;
+        const rutaConsultar =`${rutaBaseFront}/clientes/consultar.html`;
+
+        axios.get(ruta)
+            .then(function (response) {
+                const clientes = response.data;
+
+                const tabla = document.querySelector('table tbody');
+                let cuerpoHtml = '';
+
+               
+                for (const cliente of clientes) {
+                     console.log(cliente.clientes)
+                    let filaHtml = '';
+                    filaHtmlL = '<tr>'
+                    filaHtml += '<td class="text-center">' + cliente.id + '</td>'
+                    filaHtml += `<td class="text-center"><a href="${rutaConsultar}?id=${cliente.id}" class="text-decoration-none">${cliente.nombre}</a> </td>`
+                    filaHtml += '<td class="text-center">' + cliente.email + '</td>'
+                    filaHtml += '<td class="text-center">' + cliente.telefono + '</td>'
+                    filaHtml += '<td class="text-center">' + cliente.cedula + '</td>'
+                    filaHtml += `<td class="text-center"><a href="${rutaModificar}?id=${cliente.id}">Modificar</a></td>`
+                    filaHtml += `<td class="text-center"><button class="eliminar-cliente btn btn-outline-danger" data-id="${cliente.id}">Eliminar </button></td>`
+                    filaHtml += '</tr>'
+                    cuerpoHtml += filaHtml;
+                }
+                tabla.innerHTML = cuerpoHtml
+                // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
+                //la accion que estoy haciendo
+                const botonesEliminar = tabla.querySelectorAll('.eliminar-cliente');
+                //realizo un for each para poder recorrer la tabla 
+                botonesEliminar.forEach(function (botonEliminar) {
                     //añado un evento click para que se ejecute:    
-                        botonEliminar.addEventListener('click', function(){
-                            //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
-                            const clienteId = botonEliminar.getAttribute('data-id')
-                            //Hago referencia a la ruta de la linea 26, en donde obtender el id
-                            //de la mascota a eliminar.
-                            const rutaEliminar = ruta + '/' + clienteId;
+                    botonEliminar.addEventListener('click', function () {
+                        //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
+                        const clienteId = botonEliminar.getAttribute('data-id')
+                        //Hago referencia a la ruta de la linea 26, en donde obtender el id
+                        //de la mascota a eliminar.
+                        const rutaEliminar = ruta + '/' + clienteId;
 
-                            //Hare una pregunta de confirmacion en caso de que por error
-                            //se haya indicado que se queria eliminar a la mascota
+                        //Hare una pregunta de confirmacion en caso de que por error
+                        //se haya indicado que se queria eliminar a la mascota
 
-                            if(confirm('Esta seguro que desea eliminar este cliente?')){
-                                //llamo otra vez un ajax (axios) par que me ayude a gestionar
-                                axios.delete(rutaEliminar).then(function(respuesta){
-                                    alert(respuesta.data.mensaje);
-                                    window.location.reload();
-                                })
-                            }
-
-                        });
-
-
+                        if (confirm('Esta seguro que desea eliminar este cliente?')) {
+                            //llamo otra vez un ajax (axios) par que me ayude a gestionar
+                            axios.delete(rutaEliminar).then(function (respuesta) {
+                                alert(respuesta.data.mensaje);
+                                window.location.reload();
+                            })
+                        }
 
                     });
+
+
+
                 });
-        </script>
-    </body>
+            });
+    </script>
+</body>
+
 </html>

@@ -22,7 +22,7 @@
                         + Crear
                     </a>
                     <table class="table table-striped table-hover table-bordered">
-                        <thead>
+                        <thead class="text-center">
                         <tr>
                             <td><strong>ID</strong></td>
                             <td><strong>Nombre</strong></td>
@@ -54,13 +54,13 @@
                     for (const mascota of mascotas) {
                         let filaHtml = '';
                         filaHtml = '<tr>';
-                        filaHtml += '<td>' + mascota.id + '</td>'   
-                        filaHtml += `<td><a href="${rutaBaseFront}/mascotas/consultar.html?id=${mascota.id}" class="text-decoration-none">${mascota.nombre}</a></td>`;
-                        filaHtml += '<td>' + mascota.especie + '</td>'
-                        filaHtml += '<td>' + mascota.fecha_nacimiento.slice(0,10) + '</td>'
-                        filaHtml += '<td>' + mascota.cliente + '</td>'
-                        filaHtml += `<td><a href="${rutaModificar}?id=${mascota.id}" class="btn btn-outline-primary">Modificar</a></td>`
-                        filaHtml += `<td><button class="eliminar-mascota btn btn-outline-danger" data-id="${mascota.id}">Eliminar</button></td>`
+                        filaHtml += '<td class="text-center">' + mascota.id + '</td>'   
+                        filaHtml += `<td class="text-center"><a href="${rutaBaseFront}/mascotas/consultar.html?id=${mascota.id}" class="text-decoration-none">${mascota.nombre}</a></td>`;
+                        filaHtml += '<td class="text-center">' + mascota.especie + '</td>'
+                        filaHtml += '<td class="text-center">' + mascota.fecha_nacimiento.slice(0,10) + '</td>'
+                        filaHtml += '<td class="text-center">' + mascota.cliente + '</td>'
+                        filaHtml += `<td class="text-center"><a href="${rutaModificar}?id=${mascota.id}" class="btn btn-outline-primary">Modificar</a></td>`
+                        filaHtml += `<td class="text-center"><button class="eliminar-mascota btn btn-outline-danger" data-id="${mascota.id}">Eliminar</button></td>`
                         filaHtml += '</tr>'
                         cuerpoHtml += filaHtml;
                     }

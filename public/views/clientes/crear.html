@@ -1,46 +1,65 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <!--Este es el nombre que va a tener mi cabecera-->
     <title>Hanzoft - Crear cliente</title>
-    
+    <meta charset="uft-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Librerira Bootstrap Css-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Libreria Bootstrap de JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
     <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <h1>🙋🏼‍♀️ Crear cliente 🙋🏼‍♂️</h1>
-
-    <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
-    <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
-    <form id="formulario-cliente">
-
-        <!-- Campo para escribir el nombre del doctor -->
-        <label>
-            <p><strong>Nombre: </strong></p>
-            <input type="text" id="nombre" maxlength="30" name="nombre" required>
-            <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
-        </label>
-        <label>
-            <p><strong>Correo electronico: </strong></p>
-            <input type="text" id="email" maxlength="40" name="email" required>
-        </label>
-        <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
-        <label>
-            <p><strong>Telefono: </strong></p>
-            <input type="text" id="telefono" maxlength="13" minlength="10" name="telefono" required>
-        </label>
-        <label><p><strong>Documento de identificacion</strong></p>
-        <input type="text" id="cedula" name="cedula" required>
-        </label>
-
-        <!-- Botón que envía el formulario -->
-        <div>
-            <br>
-            <input type="submit" value="Crear">
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center">🙋🏼‍♀️ Crear cliente 🙋🏼‍♂️</h1>
+            </div>
         </div>
-    </form>
 
+        <!-- Este es el formulario donde el usuario escribe el nombre del doctor y elige su especialidad -->
+        <!-- Le damos un id para poder encontrarlo fácilmente desde JavaScript -->
+        <div class="row">
+            <form id="formulario-cliente" class="col">
+                <a href="http://localhost:3000/app/mascotas/listar.html" class="btn btn-outline-secondary mb-4"> &lt; Atras</a>
+                
+                <!-- Campo para escribir el nombre del doctor -->
+                <label for="nombre" class="form-label w-100 mb-2">
+                    <p><strong>Nombre: </strong></p>
+                    <input type="text" id="nombre" maxlength="30" name="nombre" class="form-control" required>
+                    <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
+                </label>
+                <label for="email" class="form-label w-100 mb-2">
+                    <p><strong>Correo electronico: </strong></p>
+                    <input type="text" id="email" maxlength="40" name="email" class="form-control" required>
+                </label>
+                <!-- Campo tipo "select" para elegir una especialidad desde una lista -->
+                <label for="telefono" class="form-label w-100 mb-2">
+                    <p><strong>Telefono: </strong></p>
+                    <input type="text" id="telefono" maxlength="13" minlength="10" name="telefono" class="form-control" required>
+                </label>
+                <label for="cedula" class="form-label w-100 mb-2">
+                    <p><strong>Documento de identificacion</strong></p>
+                    <input type="text" id="cedula" name="cedula" class="form-control" required>
+                </label>
+
+                <!-- Botón que envía el formulario -->
+                <div>
+                    <br>
+                    <input type="submit" class="btn btn-outline-primary" value="Crear">
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Aquí empieza el código JavaScript -->
     <script>
         // Definimos la URL donde vamos a enviar los datos usando el método POST
@@ -66,27 +85,28 @@
             axios
                 .post(ruta, {
                     // nombre del cliente
-                    nombre: nombre,             
+                    nombre: nombre,
                     // correo del cliente
-                    email: email,  
+                    email: email,
                     // telefono del cliente
-                    telefono : telefono,
+                    telefono: telefono,
                     // cedula del cliente
-                    cedula : cedula
+                    cedula: cedula
                 })
                 // Si el cliente se creó correctamente, mostramos un mensaje
                 .then(function (respuesta) {
                     alert(respuesta.data.mensaje);
                     // También lo mostramos en consola
-                    console.log(respuesta.data.mensaje);  
-                    
+                    console.log(respuesta.data.mensaje);
+
                 })
                 // Si hubo un error en la petición, mostramos un mensaje de error
                 .catch(function (error) {
-                    alert(error.response.data.error );
+                    alert(error.response.data.error);
                     console.error(error);
                 });
         });
     </script>
 </body>
+
 </html>
