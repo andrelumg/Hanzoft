@@ -14,7 +14,7 @@ router.get('/', async function (peticion, respuesta) {
 
   try {
     // aca estoy declarar la consulta que me ayudara a mostrar los datos que necesito.
-    const consulta = `SELECT doctores.id, doctores.nombre AS 'doctor', especialidades.nombre AS 'especialidad'
+    const consulta = `SELECT doctores.id, doctores.nombre AS 'nombre', especialidades.nombre AS 'especialidad'
     FROM especialidades
     INNER JOIN doctores ON doctores.especialidades_id = especialidades.id`;
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Hanzoft - Citas</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid pt-4">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center mb-4">🐱 Listado de citas 🐺</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="http://localhost:3000/app/index.html" class="btn btn-outline-info mb-4" > Inicio </a>
+                    <a href="http://localhost:3000/app/citas/crear.html" class="btn btn-outline-success mb-4">
+                        + Nueva Cita
+                    </a>
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead class="text-center">
+                        <tr>
+                            <td><strong>ID</strong></td>
+                            <td><strong>Mascota</strong></td>
+                            <td><strong>Doctor</strong></td>
+                            <td><strong>Fecha</strong></td>
+                            <td><strong>Estado</strong></td>
+                            <td><strong>Usuario</strong></td>
+                            <td></td>
+                            <td></td>
+                        </tr> 
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+    
+            const rutaBaseFront = `http://localhost:3000/app`;
+             const ruta = 'http://localhost:3000/api/citas'; 
+            const rutaModificar =`${rutaBaseFront}/citas/actualizar.html`;
+                
+            axios.get(ruta)
+                .then(function (response) {
+                    const citas = response.data;
+                    
+                    const tabla = document.querySelector('table tbody');
+                    let cuerpoHtml = '';
+
+                    console.log(citas)
+                    for (const cita of citas) {
+                      
+                        let filaHtml = '';
+                        filaHtml = '<tr>';
+                        filaHtml += '<td class="text-center">' + cita.id + '</td>'   
+                        filaHtml += '<td class="text-center">'+ cita.mascota + '</td>'
+                        filaHtml += '<td class="text-center">' + cita.doctor + '</td>'
+                        filaHtml += '<td class="text-center">' + cita.fecha.slice(0,10) + '</td>'
+                        filaHtml += '<td class="text-center">' + cita.estado + '</td>'
+                        filaHtml += '<td class="text-center">' + cita.usuario + '</td>'
+                        filaHtml += `<td class="text-center"><a href="${rutaModificar}?id=${cita.id}" class="btn btn-outline-primary">Modificar</a></td>`
+                        filaHtml += `<td class="text-center"><button class="eliminar-cita btn btn-outline-danger" data-id="${cita.id}">Eliminar</button></td>`
+                        filaHtml += '</tr>'
+                        cuerpoHtml += filaHtml;
+                    }
+
+                    tabla.innerHTML = cuerpoHtml
+                    // Aca declaro mi boton eliminar, para que me realice una consulta  me reciba
+                    //la accion que estoy haciendo
+                    const botonesEliminar = tabla.querySelectorAll('.eliminar-cita');
+                    //realizo un for each para poder recorrer la tabla 
+                    botonesEliminar.forEach(function(botonEliminar){
+                    //añado un evento click para que se ejecute:    
+                        botonEliminar.addEventListener('click', function(){
+                            //Hago referencia a la data que trabeje en la linea 30, que me trae la informacion
+                            const citaId = botonEliminar.getAttribute('data-id')
+                            const rutaEliminar = ruta + '/' + citaId;
+
+                            if(confirm('Esta seguro que desea eliminar esta cita?')){
+                                //llamo otra vez un ajax (axios) par que me ayude a gestionar
+                                axios.delete(rutaEliminar).then(function(respuesta){
+                                    alert(respuesta.data.mensaje);
+                                    window.location.reload();
+                                })
+                            }
+
+                        });
+
+
+
+                    });
+
+                
+                });
+        </script>
+    </body>
+</html>

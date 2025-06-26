@@ -11,6 +11,7 @@ var apiRouterDoctores = require('./routes/apiDoctores');
 var apiRouterUsuarios = require('./routes/apiUsuarios');
 var apiRouterMascotas = require('./routes/apiMascotas');
 var apiRouterClientes = require('./routes/apiClientes');
+var apiRouterCitas = require('./routes/apiCitas');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use('/api/doctores', apiRouterDoctores);
 app.use('/api/usuarios', apiRouterUsuarios);
 app.use('/api/mascotas', apiRouterMascotas);
 app.use('/api/clientes', apiRouterClientes);
+app.use('/api/citas', apiRouterCitas);
 
 // catch 404 and forward to error handler, si no funciona arrojara ese error
 app.use(function(req, res, next) {

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Hanzoft - Crear cita</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <!-- Cargamos Axios desde una CDN (una red que distribuye archivos por internet) -->
+    <!-- Axios es una librería que nos ayuda a hacer peticiones HTTP (como POST, GET) fácilmente desde JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid pt-4">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center"> 🗓️ Crear cita</h1>
+            </div>
+        </div>
+        <div class="row">
+            <form id="formulario-cita" class="col">
+                <a href="http://localhost:3000/app/mascotas/listar.html" class="btn btn-outline-secondary mb-4">
+                    &lt; Regresar
+                </a>
+                <a href="http://localhost:3000/app/index.html" class="btn btn-outline-info mb-4">
+                    Inicio
+                </a>
+                <label for="nombre_mascota" class="form-label w-100 mb-2">
+                    <p><strong>Nombre de mascota: </strong></p>
+                    <select id="nombre_mascota" name="nombre_mascota" class="form-select" required></select>
+                    <!-- Tiene un id (nombre) para poder obtener su valor desde JavaScript -->
+                </label>
+                <label for="nombre_doctor" class="form-label w-100 mb-2">
+                    <p><strong>Nombre del doctor: </strong></p>
+                    <select id="nombre_doctor" name="nombre_doctor" class="form-select mb-3" required></select>
+                </label>
+                <label for="estado" class="form-label w-100 mb-2">
+                    <p><strong>Estado de la cita:</strong></p>
+                    <select id="estado" name="estado" class="form-select mb-3" required>
+                        <option value="agendada">Agendada</option>
+                        <option value="reprogramada">Reprogramada</option>
+                        <option value="cancelada">Cancelada</option>
+                        <option value="completada">Completada</option>
+                    </select>
+                </label>
+                <label for="fecha" class="form-label w-100 mb-2">
+                    <p><strong>Fecha de cita: </strong></p>
+                    <input type="date" id="fecha" name="fecha" class="form-control" min="1999-01-01" max="2025-12-31"
+                        required>
+                </label>
+                <label for="motivo" class="form-label w-100 mb-2">
+                    <p><strong>Motivo de la consulta: </strong></p>
+                    <input type="text" id="motivo" name="motivo" class="form-control" required>
+                    </input>
+                </label>
+                <label for="usuario" class="form-label w-100 mb-2">
+                    <p><strong>Usuario que asigna la cita:</strong></p>
+                    <select id="usuario" name="usuario" class="form-select mb-3" required></select>
+                </label>
+                <!-- Botón que envía el formulario -->
+                <hr />
+                <input type="submit" value="Crear" class="btn btn-outline-primary" />
+            </form>
+        </div>
+    </div>
+    <!-- Aquí empieza el código JavaScript -->
+    <script>
+        // Definimos la URL donde vamos a enviar los datos usando el método POST
+        const ruta = 'http://localhost:3000/api/citas';
+        const rutamascotas = 'http://localhost:3000/api/mascotas';
+        const rutadoctores = 'http://localhost:3000/api/doctores';
+        const rutausuarios = 'http://localhost:3000/api/usuarios';
+
+        // Seleccionamos el formulario usando su ID (formulario-clientes)
+        const formulario = document.querySelector('#formulario-cita');
+
+        // Enviamos una solicitud POST a la API, con los datos del formulario
+        const mascotaSelector = formulario.querySelector('#nombre_mascota');
+        const doctorSelector = formulario.querySelector('#nombre_doctor');
+        const usuarioSelector = formulario.querySelector('#usuario');
+
+        //Tengo que traer la lista de mascotas para poder asociarlo a la cita
+        axios.get(rutamascotas)
+            .then(function (respuestaMascotas) {
+                //traigo los datos de mis mascotas para poder organizarlos
+                const mascotas = respuestaMascotas.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre de la mascota
+                //para que tengan relacion con la cita
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml = '';
+                console.log(mascotas)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
+
+                for (let i = 0; i < mascotas.length; i++) {
+                    const mascota = mascotas[i];
+                    console.log(mascotas[i])
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml += '<option value="' + mascota.id + '">' + mascota.nombre + '</option>';
+                }
+
+                mascotaSelector.innerHTML = miHtml;
+            });
+            
+
+            axios.get(rutadoctores)
+            .then(function (respuestaDoctores) {
+                //traigo los datos de mis mascotas para poder organizarlos
+                const doctores = respuestaDoctores.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre de la mascota
+                //para que tengan relacion con la cita
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml2 = '';
+                console.log(doctores)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
+
+                for (let i = 0; i < doctores.length; i++) {
+                    const doctor = doctores[i];  
+                    console.log(doctores[i])
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml2 += '<option value="' + doctor.id + '">' + doctor.nombre + '</option>';
+                }
+
+                doctorSelector.innerHTML = miHtml2;
+            });
+
+             axios.get(rutausuarios)
+            .then(function (respuestaUsuarios) {
+                //traigo los datos de mis mascotas para poder organizarlos
+                const usuarios = respuestaUsuarios.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre de la mascota
+                //para que tengan relacion con la cita
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml3 = '';
+                console.log(usuarios)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
+
+                for (let i = 0; i < usuarios.length; i++) {
+                    const usuario = usuarios[i];
+                    console.log(usuarios[i])
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml3 += '<option value="' + usuario.id + '">' + usuario.nombre + '</option>';
+                }
+
+                usuarioSelector.innerHTML = miHtml3;
+            });
+
+        // Escuchamos el evento "submit", o sea, cuando el usuario hace clic en "Crear"
+        formulario.addEventListener('submit', function (event) {
+            // Esto evita que el formulario recargue la página al enviarse
+            event.preventDefault();
+
+            // Obtenemos el valor que escribió el usuario en el campo de nombre
+            const nombre_mascota = document.getElementById('nombre_mascota').value;
+            const nombre_doctor = document.getElementById('nombre_doctor').value;
+            const estado = document.getElementById('estado').value;
+            const fecha = document.getElementById('fecha').value;
+            const motivo = document.getElementById('motivo').value;
+            // Obtenemos el calor que indico el usuario en telefono
+            const nombre_usuario = document.getElementById('usuario').value;
+
+            axios.post(ruta, {
+                // nombre del cliente
+                mascotas_id: Number(nombre_mascota),
+                // correo del cliente
+                doctores_id: Number(nombre_doctor),
+                estado: estado,
+                fecha: fecha,
+                motivo: motivo,
+                // telefono del cliente
+                usuarios_id: Number(nombre_usuario)
+            })
+                // Si el cliente se creó correctamente, mostramos un mensaje
+                .then(function (respuesta) {
+                    alert(respuesta.data.mensaje);
+                    // También lo mostramos en consola
+                    console.log(respuesta.data.mensaje);
+
+                })
+                // Si hubo un error en la petición, mostramos un mensaje de error
+                .catch(function (error) {
+                    alert(error.response.data.error);
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+
+</html>

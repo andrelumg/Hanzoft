@@ -58,7 +58,7 @@
                     let filaHtml = '';
                     filaHtml = '<tr>'
                     filaHtml += '<td class="text-center">' + doctor.id + '</td>'
-                    filaHtml += `<td class="text-center"><a href="${rutaConsultar}?id=${doctor.id}" class="text-decoration-none">${doctor.doctor} </td>`
+                    filaHtml += `<td class="text-center"><a href="${rutaConsultar}?id=${doctor.id}" class="text-decoration-none">${doctor.nombre} </td>`
                     filaHtml += '<td class="text-center">' + doctor.especialidad + '</td>'
                     filaHtml += `<td class="text-center"><a href="${rutaModificar}?id=${doctor.id}" class="btn btn-outline-primary" >Modificar</a></td>`
                     filaHtml += `<td class="text-center"><button class="eliminar-doctor btn btn-outline-danger" data-id="${doctor.id}" >Eliminar</button></td>`

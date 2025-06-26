@@ -128,8 +128,6 @@
             // Esto evita que el formulario recargue la página al enviarse
             event.preventDefault();
 
-            // Enviamos una solicitud PUT a la API, con los datos nuevos del formulario
-            //recordemos que la ruta es la que referenciamos en la linea43
             axios.put(ruta, {
                 // nombre nuevo del doctor
                 nombre: nombreInput.value,
