@@ -72,12 +72,12 @@ router.post('/', async function (peticion, respuesta) {
 
     //aca estoy declarando la consulta que me ayuda a validar que datos
     //debo ingresar en mi nueva cita
-    const consulta = `INSERT INTO citas(mascotas_id, doctores_id, fecha, estado, motivo, usuarios_id) 
-    VALUES (?, ?, ?, ?, ?, ?)`;
+    const consulta = `INSERT INTO citas(mascotas_id, doctores_id, fecha, motivo, usuarios_id) 
+    VALUES (?, ?, ?, ?, ?)`;
 
     // Consultar el listado de mascotas.
     // aca me retorna un array 
-    await conexionesDb.query(consulta, [mascotasId, doctoresId, datos.fecha, datos.estado, datos.motivo, usuariosId]);
+    await conexionesDb.query(consulta, [mascotasId, doctoresId, datos.fecha, datos.motivo, usuariosId]);
     
     //Si todo se realizo bien se va a mostrar un mensaje:
     respuesta.json({

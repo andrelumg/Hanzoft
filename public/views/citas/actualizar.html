@@ -51,8 +51,8 @@
                     </select>
                 </label>
                 <label for="fecha" class="form-label w-100 mb-2"><strong>Fecha de cita: </strong>
-                    <input type="date" id="fecha" name="fecha" class="form-control mb-3" 
-                    min="1999-01-01" max="2025-12-31" required>
+                    <input type="date" id="fecha" name="fecha" class="form-control mb-3" min="1999-01-01"
+                        max="2025-12-31" required>
                 </label>
                 <label for="motivo" class="form-label w-100 mb-2">
                     <p><strong>Motivo de la consulta: </strong></p>
@@ -90,7 +90,10 @@
         const motivoCita = formulario.querySelector('#motivo');
         const usuarioCita = formulario.querySelector('#usuario');
 
-        axios.get(rutaMascotas)
+        // Creo un arreglo donde voy a almacenar mis promesas.
+        const promesas = [];
+
+        const promesaMascotas = axios.get(rutaMascotas)
             .then(function (respuestaCliente) {
                 //traigo los datos de mi cliente para poder organizarlos
                 const mascotas = respuestaCliente.data;
@@ -111,73 +114,76 @@
                 }
 
                 nombreMascota.innerHTML = miHtml;
+            });
 
-                axios.get(rutaDoctores)
-                    .then(function (respuestaDoctores) {
-                        //traigo los datos de mis mascotas para poder organizarlos
-                        const doctores = respuestaDoctores.data;
-                        //aca creo una variable en la que pasare los datos que 
-                        //necesito en mi html, en este caso el ID y el nombre de la mascota
-                        //para que tengan relacion con la cita
-                        //lo inicializo vacio porque abajo en el for lo voy a llenar
-                        let miHtml2 = '';
-                        console.log('doctores', doctores)
-                        //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
-                        //solamente pasare el id y el nombre
+        const promesaDoctores = axios.get(rutaDoctores)
+            .then(function (respuestaDoctores) {
+                //traigo los datos de mis mascotas para poder organizarlos
+                const doctores = respuestaDoctores.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre de la mascota
+                //para que tengan relacion con la cita
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml2 = '';
+                console.log('doctores', doctores)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
 
-                        for (let i = 0; i < doctores.length; i++) {
-                            const doctor = doctores[i];
-                            //Aca envio o acomodo en mi variable let solo 2 atributos
-                            //el id del cliente y el nombre
-                            miHtml2 += '<option value="' + doctor.id + '">' + doctor.nombre + '</option>';
-                        }
+                for (let i = 0; i < doctores.length; i++) {
+                    const doctor = doctores[i];
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml2 += '<option value="' + doctor.id + '">' + doctor.nombre + '</option>';
+                }
 
-                        nombreDoctor.innerHTML = miHtml2;
+                nombreDoctor.innerHTML = miHtml2;
+            });
 
-                        axios.get(rutaUsuarios)
-                            .then(function (respuestaUsuarios) {
-                                //traigo los datos de mis mascotas para poder organizarlos
-                                const usuarios = respuestaUsuarios.data;
-                                //aca creo una variable en la que pasare los datos que 
-                                //necesito en mi html, en este caso el ID y el nombre de la mascota
-                                //para que tengan relacion con la cita
-                                //lo inicializo vacio porque abajo en el for lo voy a llenar
-                                let miHtml3 = '';
-                                console.log('usuarios', usuarios)
-                                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
-                                //solamente pasare el id y el nombre
+        const promesaUsuarios = axios.get(rutaUsuarios)
+            .then(function (respuestaUsuarios) {
+                //traigo los datos de mis mascotas para poder organizarlos
+                const usuarios = respuestaUsuarios.data;
+                //aca creo una variable en la que pasare los datos que 
+                //necesito en mi html, en este caso el ID y el nombre de la mascota
+                //para que tengan relacion con la cita
+                //lo inicializo vacio porque abajo en el for lo voy a llenar
+                let miHtml3 = '';
+                console.log('usuarios', usuarios)
+                //Este es el for en el cual voy a recorrer mi array de clientes y en el cual
+                //solamente pasare el id y el nombre
 
-                                for (let i = 0; i < usuarios.length; i++) {
-                                    const usuario = usuarios[i];
-                                    console.log(usuarios[i])
-                                    //Aca envio o acomodo en mi variable let solo 2 atributos
-                                    //el id del cliente y el nombre
-                                    miHtml3 += '<option value="' + usuario.id + '">' + usuario.nombre + '</option>';
-                                }
+                for (let i = 0; i < usuarios.length; i++) {
+                    const usuario = usuarios[i];
+                    console.log(usuarios[i])
+                    //Aca envio o acomodo en mi variable let solo 2 atributos
+                    //el id del cliente y el nombre
+                    miHtml3 += '<option value="' + usuario.id + '">' + usuario.nombre + '</option>';
+                }
 
-                                usuarioCita.innerHTML = miHtml3;
+                usuarioCita.innerHTML = miHtml3;
+            });
 
-                                axios.get(rutaCitas)
-                                    .then(function (respuesta) {
-                                        const citaInfo = respuesta.data;
-                                        //uso la nomenclatura para remplazar que propuse en mi base de datos  
-                                        console.log("Las citas", citaInfo)
-                                        //  
-                                        nombreMascota.value = citaInfo.mascotas_id;
-                                        nombreDoctor.value = citaInfo.doctores_id;
-                                        estadoCita.value = citaInfo.estado;
-                                        fechaCita.value = citaInfo.fecha.slice(0, 10);
-                                        motivoCita.value = citaInfo.motivo;
-                                        usuarioCita.value = citaInfo.usuarios_id;
-                                    });
-                            });
-                    });
-            })
+        promesas.push(promesaMascotas, promesaDoctores, promesaUsuarios);
+
+        Promise.all(promesas).then(function () {
+            axios.get(rutaCitas)
+                .then(function (respuesta) {
+                    const citaInfo = respuesta.data;
+                    //uso la nomenclatura para remplazar que propuse en mi base de datos  
+                    console.log("Las citas", citaInfo)
+                    //  
+                    nombreMascota.value = citaInfo.mascotas_id;
+                    nombreDoctor.value = citaInfo.doctores_id;
+                    estadoCita.value = citaInfo.estado;
+                    fechaCita.value = citaInfo.fecha.slice(0, 10);
+                    motivoCita.value = citaInfo.motivo;
+                    usuarioCita.value = citaInfo.usuarios_id;
+                });
+        })
 
         formulario.addEventListener('submit', function (event) {
             // Esto evita que el formulario recargue la página al enviarse
             event.preventDefault();
-
 
             axios.put(ruta, {
                 mascotas_id: Number(nombreMascota.value),
@@ -186,15 +192,14 @@
                 estado: estadoCita.value,
                 fecha: fechaCita.value,
                 motivo: motivoCita.value
+            }).then(function (respuesta) {
+                alert(respuesta.data.mensaje);
+                // También lo mostramos en consola, para validar si quedo bien
+                console.log(respuesta.data.mensaje);
+
+                window.location.href = 'http://localhost:3000/app/citas/listar.html'
+
             })
-                .then(function (respuesta) {
-                    alert(respuesta.data.mensaje);
-                    // También lo mostramos en consola, para validar si quedo bien
-                    console.log(respuesta.data.mensaje);
-
-                    window.location.href = 'http://localhost:3000/app/citas/listar.html'
-
-                })
                 // Si hubo un error en la petición, es decir no se hizo bien el proceso
                 // mostramos un mensaje de error, tanto en el navegador como en nuestra consola
                 .catch(function (error) {

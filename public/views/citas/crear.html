@@ -39,15 +39,6 @@
                     <p><strong>Nombre del doctor: </strong></p>
                     <select id="nombre_doctor" name="nombre_doctor" class="form-select mb-3" required></select>
                 </label>
-                <label for="estado" class="form-label w-100 mb-2">
-                    <p><strong>Estado de la cita:</strong></p>
-                    <select id="estado" name="estado" class="form-select mb-3" required>
-                        <option value="agendada">Agendada</option>
-                        <option value="reprogramada">Reprogramada</option>
-                        <option value="cancelada">Cancelada</option>
-                        <option value="completada">Completada</option>
-                    </select>
-                </label>
                 <label for="fecha" class="form-label w-100 mb-2">
                     <p><strong>Fecha de cita: </strong></p>
                     <input type="date" id="fecha" name="fecha" class="form-control" min="1999-01-01" max="2025-12-31"
@@ -166,7 +157,6 @@
             // Obtenemos el valor que escribió el usuario en el campo de nombre
             const nombre_mascota = document.getElementById('nombre_mascota').value;
             const nombre_doctor = document.getElementById('nombre_doctor').value;
-            const estado = document.getElementById('estado').value;
             const fecha = document.getElementById('fecha').value;
             const motivo = document.getElementById('motivo').value;
             // Obtenemos el calor que indico el usuario en telefono
@@ -177,7 +167,6 @@
                 mascotas_id: Number(nombre_mascota),
                 // correo del cliente
                 doctores_id: Number(nombre_doctor),
-                estado: estado,
                 fecha: fecha,
                 motivo: motivo,
                 // telefono del cliente
